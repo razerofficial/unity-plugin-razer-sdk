@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="store-sdk-standard-release-">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/java/build/intermediates/exploded-aar/store-sdk-standard-release/res" />
+      <root url="jar://$PROJECT_DIR$/java/build/intermediates/exploded-aar/store-sdk-standard-release/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,137 @@
+Compiled from "Plugin.java"
+public class com.razerzone.store.sdk.engine.unity.Plugin {
+  public static android.app.Activity getActivity();
+    Signature: ()Landroid/app/Activity;
+
+  public static void setActivity(android.app.Activity);
+    Signature: (Landroid/app/Activity;)V
+
+  public static android.os.Bundle getSavedInstanceState();
+    Signature: ()Landroid/os/Bundle;
+
+  public static void setSavedInstanceState(android.os.Bundle);
+    Signature: (Landroid/os/Bundle;)V
+
+  public static com.razerzone.store.sdk.engine.unity.StoreFacadeWrapper getStoreFacadeWrapper();
+    Signature: ()Lcom/razerzone/store/sdk/engine/unity/StoreFacadeWrapper;
+
+  public static void setStoreFacadeWrapper(com.razerzone.store.sdk.engine.unity.StoreFacadeWrapper);
+    Signature: (Lcom/razerzone/store/sdk/engine/unity/StoreFacadeWrapper;)V
+
+  public static com.razerzone.store.sdk.content.GameModManager getGameModManager();
+    Signature: ()Lcom/razerzone/store/sdk/content/GameModManager;
+
+  public static void setGameModManager(com.razerzone.store.sdk.content.GameModManager);
+    Signature: (Lcom/razerzone/store/sdk/content/GameModManager;)V
+
+  public static java.util.List<com.razerzone.store.sdk.content.GameMod> getGameModManagerInstalledResults();
+    Signature: ()Ljava/util/List;
+
+  public static void setGameModManagerInstalledResults(java.util.List<com.razerzone.store.sdk.content.GameMod>);
+    Signature: (Ljava/util/List;)V
+
+  public static java.util.List<com.razerzone.store.sdk.content.GameMod> getGameModManagerPublishedResults();
+    Signature: ()Ljava/util/List;
+
+  public static void setGameModManagerPublishedResults(java.util.List<com.razerzone.store.sdk.content.GameMod>);
+    Signature: (Ljava/util/List;)V
+
+  public static void UnitySendMessage(java.lang.String, java.lang.String, java.lang.String);
+    Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+
+  public com.razerzone.store.sdk.engine.unity.Plugin(android.app.Activity);
+    Signature: (Landroid/app/Activity;)V
+
+  public static void initPlugin(java.lang.String);
+    Signature: (Ljava/lang/String;)V
+
+  public static boolean isInitialized();
+    Signature: ()Z
+
+  public static void putGameData(java.lang.String, java.lang.String);
+    Signature: (Ljava/lang/String;Ljava/lang/String;)V
+
+  public static java.lang.String getGameData(java.lang.String);
+    Signature: (Ljava/lang/String;)Ljava/lang/String;
+
+  public static void requestGamerInfo();
+    Signature: ()V
+
+  public static void requestProducts(java.lang.String);
+    Signature: (Ljava/lang/String;)V
+
+  public static void requestPurchase(java.lang.String);
+    Signature: (Ljava/lang/String;)V
+
+  public static void requestReceipts();
+    Signature: ()V
+
+  public static boolean isRunningOnSupportedHardware();
+    Signature: ()Z
+
+  public static void setSafeArea(float);
+    Signature: (F)V
+
+  public static void clearFocus();
+    Signature: ()V
+
+  public static void saveGameMod(com.razerzone.store.sdk.content.GameMod, com.razerzone.store.sdk.content.GameMod$Editor);
+    Signature: (Lcom/razerzone/store/sdk/content/GameMod;Lcom/razerzone/store/sdk/content/GameMod$Editor;)V
+
+  public static void getGameModManagerInstalled();
+    Signature: ()V
+
+  public static com.razerzone.store.sdk.content.GameMod[] getGameModManagerInstalledResultsArray();
+    Signature: ()[Lcom/razerzone/store/sdk/content/GameMod;
+
+  public static void getGameModManagerPublished(java.lang.String);
+    Signature: (Ljava/lang/String;)V
+
+  public static com.razerzone.store.sdk.content.GameMod[] getGameModManagerPublishedResultsArray();
+    Signature: ()[Lcom/razerzone/store/sdk/content/GameMod;
+
+  public static void contentDelete(com.razerzone.store.sdk.content.GameMod);
+    Signature: (Lcom/razerzone/store/sdk/content/GameMod;)V
+
+  public static void contentPublish(com.razerzone.store.sdk.content.GameMod);
+    Signature: (Lcom/razerzone/store/sdk/content/GameMod;)V
+
+  public static void contentUnpublish(com.razerzone.store.sdk.content.GameMod);
+    Signature: (Lcom/razerzone/store/sdk/content/GameMod;)V
+
+  public static void contentDownload(com.razerzone.store.sdk.content.GameMod);
+    Signature: (Lcom/razerzone/store/sdk/content/GameMod;)V
+
+  public static float getFloat(java.lang.Float);
+    Signature: (Ljava/lang/Float;)F
+
+  public static android.graphics.Bitmap[] getBitmapArray(java.util.List<android.graphics.Bitmap>);
+    Signature: (Ljava/util/List;)[Landroid/graphics/Bitmap;
+
+  public static com.razerzone.store.sdk.content.GameModScreenshot[] getGameModScreenshotArray(java.util.List<com.razerzone.store.sdk.content.GameModScreenshot>);
+    Signature: (Ljava/util/List;)[Lcom/razerzone/store/sdk/content/GameModScreenshot;
+
+  public static java.lang.String[] getStringArray(java.util.List<java.lang.String>);
+    Signature: (Ljava/util/List;)[Ljava/lang/String;
+
+  public static java.lang.String getStringResource(java.lang.String);
+    Signature: (Ljava/lang/String;)Ljava/lang/String;
+
+  public static void shutdown();
+    Signature: ()V
+
+  public static java.lang.String getDeviceHardwareName();
+    Signature: ()Ljava/lang/String;
+
+  static java.lang.String access$000();
+    Signature: ()Ljava/lang/String;
+
+  static void access$100();
+    Signature: ()V
+
+  static void access$200(float);
+    Signature: (F)V
+
+  static {};
+    Signature: ()V
+}

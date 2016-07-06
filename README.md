@@ -1,2 +1,2 @@
 # unity-plugin-razer-sdk
-The Unity Plugin for the Razer SDK
+Documentation for the Unity Plugin can be found at [https://github.com/ouya/docs/blob/razer-sdk/unity.md](https://github.com/ouya/docs/blob/razer-sdk/unity.md).

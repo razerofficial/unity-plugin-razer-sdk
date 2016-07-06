@@ -1,0 +1,52 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* aapt\
+* aapt\AndroidManifest.xml
+* aidl\
+* aidl\com\
+* aidl\com\razerzone\
+* aidl\com\razerzone\store\
+* aidl\com\razerzone\store\sdk\
+* aidl\com\razerzone\store\sdk\accounts\
+* aidl\com\razerzone\store\sdk\accounts\StoreProfile.aidl
+* aidl\com\razerzone\store\sdk\achievements\
+* aidl\com\razerzone\store\sdk\achievements\Achievement.aidl
+* aidl\com\razerzone\store\sdk\content\
+* aidl\com\razerzone\store\sdk\content\GameMod.aidl
+* aidl\com\razerzone\store\sdk\content\GameModScreenshot.aidl
+* aidl\com\razerzone\store\sdk\purchases\
+* aidl\com\razerzone\store\sdk\purchases\Product.aidl
+* aidl\com\razerzone\store\sdk\purchases\Purchasable.aidl
+* aidl\com\razerzone\store\sdk\purchases\Receipt.aidl
+* classes.jar
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => storesdkstandardrelease\src\main\AndroidManifest.xml
+* assets\ => storesdkstandardrelease\src\main\assets
+* res\ => storesdkstandardrelease\src\main\res
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

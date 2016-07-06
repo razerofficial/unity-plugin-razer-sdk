@@ -1,0 +1,47 @@
+apply plugin: 'com.android.library'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.2'
+    }
+}
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    provided files('libs/UnityPlayer.jar')
+    compile(name: 'store-sdk-standard-release', ext: 'aar')
+    provided fileTree(include: ['*.jar'], dir: 'libs')
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion '19.1'
+
+    defaultConfig {
+        ndk {
+            moduleName 'lib-ndk-unity-store-sdk'
+            abiFilters 'armeabi-v7a'
+            stl 'stlport_static'
+            cFlags '-Wno-error=format-security'
+            ldLibs 'c', 'm', 'log'
+        }
+    }
+}
+
+task copyJar(dependsOn: ':java:build', type: Copy) {
+	from new File(project(':java').buildDir, 'outputs/aar/java-release.aar')
+	into '../../Assets/Plugins/Android/libs'
+	rename {'UnityPluginStoreSDK.aar'}
+}
