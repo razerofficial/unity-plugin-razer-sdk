@@ -8,6 +8,7 @@ Temp/*
 *.unityproj
 *.sln
 *.userprefs
+*.unitypackage
 unity-plugin-ouya-sdk.CSharp.Editor.csproj
 unity-plugin-ouya-sdk.CSharp.Plugins.csproj
 unity-plugin-ouya-sdk.CSharp.csproj
@@ -20,5 +21,3 @@ Assets/Plugins/Android/libs/armeabi-v7a/lib-ndk-unity-store-sdk.so
 Assets/Plugins/Android/libs/armeabi-v7a/lib-ndk-unity-store-sdk.so.meta
 Assets/Plugins/Android/libs/store-sdk-standard-release.jar
 Assets/Plugins/Android/libs/store-sdk-standard-release.jar.meta
-RazerSDK-Core.unitypackage
-RazerSDK-Examples.unitypackage
