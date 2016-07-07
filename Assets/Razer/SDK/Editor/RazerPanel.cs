@@ -957,7 +957,7 @@ namespace com.razerzone.store.sdk.engine.unity
 
                     if (GUILayout.Button("Check for plugin updates"))
                     {
-                        Application.OpenURL("https://github.com/ouya/ouya-sdk-examples/releases");
+                        Application.OpenURL("https://github.com/razerofficial/unity-plugin-razer-sdk/releases");
                     }
 
                     if (GUILayout.Button("Developer Chat on Razer Forums"))
@@ -967,7 +967,7 @@ namespace com.razerzone.store.sdk.engine.unity
 
                     if (GUILayout.Button("Read Razer Unity Docs"))
                     {
-                        Application.OpenURL("https://devs.ouya.tv/developers/docs/unity");
+                        Application.OpenURL("https://github.com/ouya/docs/blob/razer-sdk/unity.md");
                     }
 
                     if (GUILayout.Button("Razer Developer Portal"))
