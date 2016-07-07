@@ -47,6 +47,7 @@ public class Plugin {
 	private static Activity sActivity = null;
 	private static Bundle sSavedInstanceState = null;
 	private static StoreFacadeWrapper sStoreFacadeWrapper = null;
+    private static UnityPlayer sUnityPlayer = null;
 	private static GameModManager sGameModManager = null;
 	private static List<GameMod> sGameModManagerInstalledResults = null;
 	private static List<GameMod> sGameModManagerPublishedResults = null;
@@ -74,6 +75,11 @@ public class Plugin {
 	public static void setStoreFacadeWrapper(StoreFacadeWrapper storeFacadeWrapper) {
 		sStoreFacadeWrapper = storeFacadeWrapper;
 	}
+
+    public static UnityPlayer getUnityPlayer() { return sUnityPlayer; }
+    public static void setUnityPlayer(UnityPlayer unityPlayer) {
+        sUnityPlayer = unityPlayer;
+    }
 
 	public static GameModManager getGameModManager() {
 		return sGameModManager;
@@ -649,8 +655,26 @@ public class Plugin {
 
     public static void quit() {
         if (sEnableLogging) {
-            Log.d(TAG, "Application quiting...");
+            Log.d(TAG, "quit: Application quiting...");
         }
-        android.os.Process.killProcess(android.os.Process.myPid());
+
+        final Activity activity = getActivity();
+        if (null == activity) {
+            Log.e(TAG, "quit: activity is null!");
+            return;
+        }
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                UnityPlayer unityPlayer = getUnityPlayer();
+                if (null == unityPlayer) {
+                    Log.e(TAG, "quit: UnityPlayer is null!");
+                }
+                unityPlayer.quit();
+                activity.finish();
+            }
+        };
+        activity.runOnUiThread(runnable);
     }
 }
