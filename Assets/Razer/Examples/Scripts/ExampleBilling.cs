@@ -127,7 +127,7 @@ namespace com.razerzone.store.sdk.engine.unity
         public void OnSuccessShutdown()
         {
             m_state = "Shutdown Success!";
-            Application.Quit();
+            RazerSDK.quit();
         }
 
         public void OnFailureShutdown()

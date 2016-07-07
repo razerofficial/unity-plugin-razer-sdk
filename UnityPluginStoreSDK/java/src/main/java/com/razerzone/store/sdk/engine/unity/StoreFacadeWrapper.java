@@ -373,7 +373,7 @@ public class StoreFacadeWrapper {
                 if (sEnableLogging) {
                     Log.i(TAG, "ShutdownListener onSuccess");
                 }
-                Plugin.UnitySendMessage("RazerGameObject", "ShutdownOnSuccessListener", "");
+				Plugin.UnitySendMessage("RazerGameObject", "ShutdownOnSuccessListener", "");
             }
 
             @Override

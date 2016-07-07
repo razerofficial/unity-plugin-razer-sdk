@@ -41,6 +41,7 @@ namespace com.razerzone.store.sdk.engine.unity
         private static IntPtr _jmGetGameModScreenshotArray = IntPtr.Zero;
         private static IntPtr _jmGetStringArray = IntPtr.Zero;
         private static IntPtr _jmShutdown = IntPtr.Zero;
+		private static IntPtr _jmQuit = IntPtr.Zero;
         private IntPtr _instance = IntPtr.Zero;
 
         /// <summary>
@@ -536,6 +537,22 @@ namespace com.razerzone.store.sdk.engine.unity
                     string strMethod = "shutdown";
                     _jmShutdown = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "()V");
                     if (_jmShutdown != IntPtr.Zero)
+                    {
+#if VERBOSE_LOGGING
+                        Debug.Log(string.Format("Found {0} method", strMethod));
+#endif
+                    }
+                    else
+                    {
+                        Debug.LogError(string.Format("Failed to find {0} method", strMethod));
+                        return;
+                    }
+                }
+				
+                {
+                    string strMethod = "quit";
+                    _jmQuit = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "()V");
+                    if (_jmQuit != IntPtr.Zero)
                     {
 #if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} method", strMethod));
@@ -1377,7 +1394,35 @@ namespace com.razerzone.store.sdk.engine.unity
 
             AndroidJNI.CallStaticVoidMethod(_jcPlugin, method, new jvalue[] { });
         }
+		
+        public static void quit()
+        {
+#if VERBOSE_LOGGING
+            Debug.Log(string.Format("Invoking {0}...", MethodBase.GetCurrentMethod().Name));
+#endif
 
+            if (_jcPlugin == IntPtr.Zero)
+            {
+                Debug.LogError("_jcPlugin is not initialized");
+                return;
+            }
+
+            string strMethod = "quit";
+            IntPtr method = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "()V");
+            if (method != IntPtr.Zero)
+            {
+#if VERBOSE_LOGGING
+                Debug.Log(string.Format("Found {0} method", strMethod));
+#endif
+            }
+            else
+            {
+                Debug.LogError(string.Format("Failed to find {0} method", strMethod));
+                return;
+            }
+
+            AndroidJNI.CallStaticVoidMethod(_jcPlugin, method, new jvalue[] { });
+        }
     }
 }
 

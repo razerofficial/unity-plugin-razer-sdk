@@ -676,6 +676,16 @@ namespace com.razerzone.store.sdk.engine.unity
             Plugin.shutdown();
 #endif
         }
+		
+        /// <summary>
+        /// Quit the application
+        /// </summary>
+        public static void quit()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            Plugin.quit();
+#endif
+        }
 
         #endregion
 

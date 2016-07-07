@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
 	private static final String PLUGIN_VERSION = "2.1.0.5";
 
 	private static final boolean sEnableLogging = false;
-	private static final boolean sEnableInputLogging = true;
+	private static final boolean sEnableInputLogging = false;
 
     protected UnityPlayer mUnityPlayer;	// don't change the name of this variable; referenced from native code
 

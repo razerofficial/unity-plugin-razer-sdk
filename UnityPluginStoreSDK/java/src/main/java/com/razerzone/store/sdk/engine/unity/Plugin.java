@@ -34,13 +34,10 @@ import com.razerzone.store.sdk.purchases.Product;
 import com.razerzone.store.sdk.StoreFacade;
 import com.unity3d.player.UnityPlayer;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.security.InvalidParameterException;
 import java.util.*;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class Plugin {
 	private static final String TAG = Plugin.class.getSimpleName();
@@ -633,22 +630,12 @@ public class Plugin {
 	}
 
 	public static void shutdown() {
-		final Activity activity = getActivity();
-		if (null == activity) {
-			Log.e(TAG, "shutdown: activity is null!");
-			return;
-		}
-		final StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
-		if (null == storeFacadeWrapper) {
-			Log.e(TAG, "shutdown: storeFacadeWrapper is null!");
-			return;
-		}
-		Runnable runnable = new Runnable() {
-			public void run() {
-				storeFacadeWrapper.shutdown();
-			}
-		};
-		activity.runOnUiThread(runnable);
+        final StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
+        if (null == storeFacadeWrapper) {
+            Log.e(TAG, "shutdown: storeFacadeWrapper is null!");
+            return;
+        }
+        storeFacadeWrapper.shutdown();
 	}
 
 	public static String getDeviceHardwareName() {
@@ -659,4 +646,11 @@ public class Plugin {
 		}
 		return storeFacadeWrapper.getDeviceHardwareName();
 	}
+
+    public static void quit() {
+        if (sEnableLogging) {
+            Log.d(TAG, "Application quiting...");
+        }
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
 }
