@@ -16,10 +16,10 @@
 
 package com.razerzone.store.sdk.engine.unity;
 
-import com.razerzone.store.sdk.Controller;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
+import com.razerzone.store.sdk.Controller;
 
 public class DebugInput {
     private static final String TAG = DebugInput.class.getSimpleName();
