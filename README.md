@@ -1,6 +1,6 @@
 # Unity Game Engine #
 
-The [RazerSDK](https://github.com/ouya/docs/blob/razer-sdk/razer_sdk.md) can be accessed via the `RazerSDK Unity Plugin`.
+The [RazerSDK](https://github.com/razerofficial/razer-sdk-docs) can be accessed via the `RazerSDK Unity Plugin`.
 
 # Forums
 
