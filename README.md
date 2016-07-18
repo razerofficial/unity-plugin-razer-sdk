@@ -1,5 +1,7 @@
 # Unity Game Engine #
 
+The [RazerSDK](https://github.com/ouya/docs/blob/razer-sdk/razer_sdk.md) can be accessed via the `RazerSDK Unity Plugin`.
+
 # Forums
 
 [Forge TV on Razer Forums](https://insider.razerzone.com/index.php?forums/razer-forge-tv.126/)
