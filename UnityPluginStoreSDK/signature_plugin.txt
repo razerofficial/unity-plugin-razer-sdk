@@ -18,6 +18,12 @@ public class com.razerzone.store.sdk.engine.unity.Plugin {
   public static void setStoreFacadeWrapper(com.razerzone.store.sdk.engine.unity.StoreFacadeWrapper);
     Signature: (Lcom/razerzone/store/sdk/engine/unity/StoreFacadeWrapper;)V
 
+  public static com.unity3d.player.UnityPlayer getUnityPlayer();
+    Signature: ()Lcom/unity3d/player/UnityPlayer;
+
+  public static void setUnityPlayer(com.unity3d.player.UnityPlayer);
+    Signature: (Lcom/unity3d/player/UnityPlayer;)V
+
   public static com.razerzone.store.sdk.content.GameModManager getGameModManager();
     Signature: ()Lcom/razerzone/store/sdk/content/GameModManager;
 
@@ -60,8 +66,8 @@ public class com.razerzone.store.sdk.engine.unity.Plugin {
   public static void requestProducts(java.lang.String);
     Signature: (Ljava/lang/String;)V
 
-  public static void requestPurchase(java.lang.String);
-    Signature: (Ljava/lang/String;)V
+  public static void requestPurchase(java.lang.String, java.lang.String);
+    Signature: (Ljava/lang/String;Ljava/lang/String;)V
 
   public static void requestReceipts();
     Signature: ()V
@@ -122,6 +128,9 @@ public class com.razerzone.store.sdk.engine.unity.Plugin {
 
   public static java.lang.String getDeviceHardwareName();
     Signature: ()Ljava/lang/String;
+
+  public static void quit();
+    Signature: ()V
 
   static java.lang.String access$000();
     Signature: ()Ljava/lang/String;

@@ -557,7 +557,7 @@ namespace com.razerzone.store.sdk.engine.unity
 #endif
         }
 
-        public static void requestProducts(List<Purchasable> purchasables)
+        public static void requestProducts(List<String> purchasables)
         {
             if (!isIAPInitComplete())
             {
@@ -566,9 +566,9 @@ namespace com.razerzone.store.sdk.engine.unity
 #if UNITY_ANDROID && !UNITY_EDITOR
             JSONArray jsonArray = new JSONArray();
             int index = 0;
-            foreach (Purchasable purchasable in purchasables)
+            foreach (String identifier in purchasables)
             {
-                jsonArray.put(index, purchasable.productId);
+                jsonArray.put(index, identifier);
                 ++index;
             }
             Plugin.requestProducts(jsonArray.toString());
@@ -576,14 +576,22 @@ namespace com.razerzone.store.sdk.engine.unity
 #endif
         }
 
-        public static void requestPurchase(Purchasable purchasable)
+		public enum ProductType
+		{
+			ENTITLEMENT,
+			CONSUMABLE,
+			SUBSCRIPTION,
+			UNKNOWN
+		}
+
+		public static void requestPurchase(String identifier, ProductType productType)
         {
             if (!isIAPInitComplete())
             {
                 return;
             }
 #if UNITY_ANDROID && !UNITY_EDITOR
-            Plugin.requestPurchase(purchasable.productId);
+			Plugin.requestPurchase(identifier, productType.ToString());
 #endif
         }
 
@@ -714,12 +722,6 @@ namespace com.razerzone.store.sdk.engine.unity
                 return result;
             }
 #endif
-        }
-
-        [Serializable]
-        public class Purchasable
-        {
-            public string productId = string.Empty;
         }
 
         [Serializable]

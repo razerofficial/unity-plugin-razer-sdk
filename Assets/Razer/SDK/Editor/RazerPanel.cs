@@ -967,7 +967,7 @@ namespace com.razerzone.store.sdk.engine.unity
 
                     if (GUILayout.Button("Read Razer Unity Docs"))
                     {
-                        Application.OpenURL("https://github.com/ouya/docs/blob/razer-sdk/unity.md");
+						Application.OpenURL("https://github.com/razerofficial/unity-plugin-razer-sdk");
                     }
 
                     if (GUILayout.Button("Razer Developer Portal"))

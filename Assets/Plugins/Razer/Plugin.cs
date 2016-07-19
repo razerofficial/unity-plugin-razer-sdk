@@ -231,7 +231,7 @@ namespace com.razerzone.store.sdk.engine.unity
 
                 {
                     string strMethod = "requestPurchase";
-                    _jmRequestPurchase = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "(Ljava/lang/String;)V");
+					_jmRequestPurchase = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "(Ljava/lang/String;Ljava/lang/String;)V");
                     if (_jmRequestPurchase != IntPtr.Zero)
                     {
 #if VERBOSE_LOGGING
@@ -766,7 +766,7 @@ namespace com.razerzone.store.sdk.engine.unity
             AndroidJNI.CallStaticVoidMethod(_jcPlugin, _jmRequestProducts, new jvalue[] { new jvalue() { l = arg1 } });
         }
 
-        public static void requestPurchase(string identifier)
+        public static void requestPurchase(string identifier, string productType)
         {
 #if VERBOSE_LOGGING
             Debug.Log(string.Format("Invoking {0}...", MethodBase.GetCurrentMethod().Name));
@@ -792,8 +792,10 @@ namespace com.razerzone.store.sdk.engine.unity
             m_pendingRequestPurchase = true;
 
             IntPtr arg1 = AndroidJNI.NewStringUTF(identifier);
-            AndroidJNI.CallStaticVoidMethod(_jcPlugin, _jmRequestPurchase, new jvalue[] { new jvalue() { l = arg1 } });
+			IntPtr arg2 = AndroidJNI.NewStringUTF(productType);
+			AndroidJNI.CallStaticVoidMethod(_jcPlugin, _jmRequestPurchase, new jvalue[] { new jvalue() { l = arg1 }, new jvalue() { l = arg2 } });
             AndroidJNI.DeleteLocalRef(arg1);
+			AndroidJNI.DeleteLocalRef(arg2);
         }
 
         public static void requestReceipts()
