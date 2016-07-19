@@ -820,14 +820,12 @@ string[] productItems =
 	"YOUR_PRODUCT_ID_3",
 };
 
-List<RazerSDK.Purchasable> purchasables =
-	new List<RazerSDK.Purchasable>();
+List<string> purchasables =
+	new List<string>();
 	
-foreach (string productId in productItems)
+foreach (string identifier in productItems)
 {
-	RazerSDK.Purchasable purchasable = new RazerSDK.Purchasable();
-	purchasable.productId = productId;
-	purchasables.Add(purchasable);
+	purchasables.Add(identifier);
 }
 
 RazerSDK.requestProducts(purchasables);
@@ -842,20 +840,18 @@ var productItems : String[] =
 	"YOUR_PRODUCT_ID_3",
 };
 
-var purchasables : List<RazerSDK.Purchasable> =
-	new List<RazerSDK.Purchasable>();
+var purchasables : List<String> =
+	new List<String>();
 	
-foreach (var productId : String in productItems)
+foreach (var identifier : String in productItems)
 {
-	var purchasable : RazerSDK.Purchasable = new RazerSDK.Purchasable();
-	purchasable.productId = productId;
-	purchasables.Add(purchasable);
+	purchasables.Add(identifier);
 }
 
 RazerSDK.requestProducts(purchasables);
 ```
 
-Extend the `IRequestProductsListener ` interface to receive the callbacks for invoking `RazerSDK.requestProducts(purchasables)`.
+Extend the `IRequestProductsListener ` interface to receive the callbacks for invoking `RazerSDK.requestProducts(List<string>)`.
 
 C#
 ```
@@ -956,19 +952,31 @@ Prepare a `Purchasable` to initiate a purchase.
 
 C#
 ```
-RazerSDK.Purchasable purchasable = new RazerSDK.Purchasable();
-purchasable.productId = "YOUR_PRODUCT_ID";
-RazerSDK.requestPurchase(purchasable);
+string identifier = "YOUR_PRODUCT_ID";
+
+// Purchase Entitlement
+RazerSDK.ProductType productType = RazerSDK.ProductType.ENTITLEMENT;
+RazerSDK.requestPurchase(identifier, productType);
+
+// Purchase Consumable
+RazerSDK.ProductType productType = RazerSDK.ProductType.CONSUMABLE;
+RazerSDK.requestPurchase(identifier, productType);
 ```
 
 JavaScript
 ```
-var purchasable : RazerSDK.Purchasable = new RazerSDK.Purchasable();
-purchasable.productId = "YOUR_PRODUCT_ID";
-RazerSDK.requestPurchase(purchasable);
+var identifier : String = "YOUR_PRODUCT_ID";
+
+// Purchase Entitlement
+var productType : RazerSDK.ProductType = RazerSDK.ProductType.ENTITLEMENT;
+RazerSDK.requestPurchase(identifier, productType);
+
+// Purchase Entitlement
+var productType : RazerSDK.ProductType = RazerSDK.ProductType.CONSUMABLE;
+RazerSDK.requestPurchase(identifier, productType);
 ```
 
-Extend the `IRequestPurchaseListener ` interface to receive the callbacks for invoking `RazerSDK.requestPurchase(purchasable)`.
+Extend the `IRequestPurchaseListener ` interface to receive the callbacks for invoking `RazerSDK.requestPurchase(String, RazerSDK.ProductType)`.
 
 C#
 ```
