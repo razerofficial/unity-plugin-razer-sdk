@@ -809,7 +809,7 @@ JavaScript
 
 Product Info provides access to the product name, details, localPrice, and other information.
 
-Prepare a list of Purchasables to request details for.
+Prepare a list of String to request the product details for.
 
 C#
 ```
@@ -947,8 +947,6 @@ JavaScript
 # Request Purchase #
 
 A gamer can purchase an entitlement or consumable using `RazerSDK.requestPurchase`.
-
-Prepare a `Purchasable` to initiate a purchase.
 
 C#
 ```
