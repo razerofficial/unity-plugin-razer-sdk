@@ -405,12 +405,12 @@ float RazerSDK.ControllerInput.GetAxis(int playerNum, int axis);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 
-RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_LS_X)
-RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_LS_Y)
-RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_RS_X)
-RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_RS_Y)
-RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_L2)
-RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_R2)
+float lsx = RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_LS_X);
+float lsy = RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_LS_Y);
+float rsx = RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_RS_X);
+float rsy = RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_RS_Y);
+float l2 = RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_L2);
+float r2 = RazerSDK.ControllerInput.GetAxis(playerNum, Controller.AXIS_R2);
 
 #endif
 
@@ -419,12 +419,12 @@ float RazerSDK.ControllerInput.GetAxisRaw(int playerNum, int axis);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 
-RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_LS_X)
-RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_LS_Y)
-RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_RS_X)
-RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_RS_Y)
-RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_L2)
-RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_R2)
+float lsx = RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_LS_X);
+float lsy = RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_LS_Y);
+float rsx = RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_RS_X);
+float rsy = RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_RS_Y);
+float l2 = RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_L2);
+float r2 = RazerSDK.ControllerInput.GetAxisRaw(playerNum, Controller.AXIS_R2);
 
 #endif
 ```
@@ -454,18 +454,54 @@ bool RazerSDK.ControllerInput.GetButton(int playerNum, int keyCode);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_O)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_U)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_Y)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_A)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_L1)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_R1)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_L3)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_R3)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_DPAD_UP)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_DPAD_DOWN)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_DPAD_RIGHT)
-RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_DPAD_LEFT)
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_O))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_U))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_Y))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_A))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_L1))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_R1))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_L3))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_R3))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_DPAD_UP))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_DPAD_DOWN))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_DPAD_RIGHT))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButton(playerNum, Controller.BUTTON_DPAD_LEFT))
+{
+}
+
 
 #endif
 
@@ -474,19 +510,58 @@ bool RazerSDK.ControllerInput.GetButtonDown(int playerNum, int button);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_O)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_U)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_Y)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_A)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_L1)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_R1)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_L3)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_R3)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_DPAD_UP)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_DPAD_DOWN)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_DPAD_RIGHT)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_DPAD_LEFT)
-RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_MENU)
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_O))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_U))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_Y))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_A))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_L1))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_R1))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_L3))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_R3))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_DPAD_UP))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_DPAD_DOWN))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_DPAD_RIGHT))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_DPAD_LEFT))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonDown(playerNum, Controller.BUTTON_MENU))
+{
+}
+
 
 #endif
 
@@ -495,19 +570,58 @@ bool RazerSDK.ControllerInput.GetButtonUp(int playerNum, int button);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_O)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_U)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_Y)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_A)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_L1)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_R1)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_L3)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_R3)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_DPAD_UP)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_DPAD_DOWN)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_DPAD_RIGHT)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_DPAD_LEFT)
-RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_MENU)
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_O))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_U))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_Y))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_A))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_L1))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_R1))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_L3))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_R3))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_DPAD_UP))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_DPAD_DOWN))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_DPAD_RIGHT))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_DPAD_LEFT))
+{
+}
+
+if (RazerSDK.ControllerInput.GetButtonUp(playerNum, Controller.BUTTON_MENU))
+{
+}
+
 
 #endif
 ```
@@ -527,6 +641,22 @@ C#
 //@returns true if the player number is connected
 //@returns false if the player number is disconnected
 bool RazerSDK.ControllerInput.IsControllerConnected(int playerNum);
+
+if (RazerSDK.ControllerInput.IsControllerConnected(0))
+{
+}
+
+if (RazerSDK.ControllerInput.IsControllerConnected(1))
+{
+}
+
+if (RazerSDK.ControllerInput.IsControllerConnected(2))
+{
+}
+
+if (RazerSDK.ControllerInput.IsControllerConnected(3))
+{
+}
 
 #endif
 ```
