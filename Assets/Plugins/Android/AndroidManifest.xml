@@ -8,7 +8,6 @@
         <category android:name="android.intent.category.LAUNCHER" />
         <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
         <category android:name="com.razerzone.store.category.GAME" />
-        <category android:name="tv.ouya.intent.category.GAME" />
       </intent-filter>
       <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
     </activity>
