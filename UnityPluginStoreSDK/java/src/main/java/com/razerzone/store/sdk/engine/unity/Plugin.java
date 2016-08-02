@@ -287,14 +287,14 @@ public class Plugin {
 		}
 	}
 
-	public static void requestPurchase(String productId) {
+	public static void requestPurchase(String productId, String productType) {
 		try {
-			//Log.i(TAG, "requestPurchase productId: " + productId);
+			//Log.i(TAG, "requestPurchase: productId=" + productId+" productType="+productType);
 			StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
 			if (null == storeFacadeWrapper) {
 				Log.e(TAG, "requestPurchase: storeFacadeWrapper is null!");
 			} else {
-				Product product = new Product(productId, "", 0, 0, "", 0, 0, "", "", Product.Type.ENTITLEMENT);
+				Product product = new Product(productId, "", 0, 0, "", 0, 0, "", "", Product.Type.valueOf(productType));
 				storeFacadeWrapper.requestPurchase(product);
 			}
 		} catch (Exception e) {

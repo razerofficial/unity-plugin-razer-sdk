@@ -34,10 +34,10 @@ namespace com.razerzone.store.sdk.engine.unity
         /// </summary>
         public string[] Purchasables =
         {
-        "long_sword",
-        "sharp_axe",
-        "__DECLINED__THIS_PURCHASE",
-    };
+			"long_sword",
+			"sharp_axe",
+			"__DECLINED__THIS_PURCHASE",
+		};
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 
@@ -434,14 +434,12 @@ namespace com.razerzone.store.sdk.engine.unity
                     (m_focusManager.SelectedButton == m_btnRequestProducts &&
                     RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_O)))
                 {
-                    List<RazerSDK.Purchasable> productIdentifierList =
-                        new List<RazerSDK.Purchasable>();
+                    List<string> productIdentifierList =
+                        new List<string>();
 
-                    foreach (string productId in Purchasables)
+                    foreach (string identifier in Purchasables)
                     {
-                        RazerSDK.Purchasable purchasable = new RazerSDK.Purchasable();
-                        purchasable.productId = productId;
-                        productIdentifierList.Add(purchasable);
+						productIdentifierList.Add(identifier);
                     }
 
                     m_status = "Requesting products...";
@@ -472,9 +470,7 @@ namespace com.razerzone.store.sdk.engine.unity
                     {
                         m_status = "Requesting purchase...";
                         //Debug.Log(string.Format("Purchase Identifier: {0}", product.identifier));
-                        RazerSDK.Purchasable purchasable = new RazerSDK.Purchasable();
-                        purchasable.productId = product.identifier;
-                        RazerSDK.requestPurchase(purchasable);
+						RazerSDK.requestPurchase(product.identifier, RazerSDK.ProductType.ENTITLEMENT);
                     }
                     GUI.backgroundColor = oldColor;
 
