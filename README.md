@@ -32,6 +32,14 @@ The core package contains a static access class for accessing input and the `Cor
 
 This input API is targeted for `Cortex` and is not maintained as a cross-platform input system.
 
+# JDK
+
+[JDK8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) should be installed and the path set in `Edit->Preferences->External Tools->JDK` (similar to the following).
+
+```
+C:\Program Files\Java\jdk1.8.0_101
+```
+
 # Updating #
 
 Download the core package from [Releases](https://github.com/razerofficial/unity-plugin-razer-sdk/releases). Import the core package to update the plugin. In the import dialog uncheck the `AndroidManifest.xml` and `icons` if you don't want to replace your customizations. The imported plugin will be ready to `Build and Run` as recompiling the `Java` and `Native` plugins are no longer required now that the package includes the prebuilt libraries.

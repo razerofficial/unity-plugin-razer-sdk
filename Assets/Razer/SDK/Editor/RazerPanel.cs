@@ -320,7 +320,7 @@ namespace com.razerzone.store.sdk.engine.unity
                     pathJDK = @"/System/Library/Java/JavaVirtualMachines/1.6.0.jdk";
                     break;
                 case RuntimePlatform.WindowsEditor:
-                    pathJDK = @"C:\Program Files (x86)/Java/jdk1.6.0_37";
+                    pathJDK = @"C:\Program Files\Java\jdk1.8.0_101";
                     break;
             }
 
@@ -333,10 +333,10 @@ namespace com.razerzone.store.sdk.engine.unity
             switch (Application.platform)
             {
                 case RuntimePlatform.OSXEditor:
-                    path = EditorUtility.OpenFolderPanel(string.Format("Path to {0}", KEY_PATH_JAVA_JDK), pathJDK, "../jdk1.6.0_37");
+                    path = EditorUtility.OpenFolderPanel(string.Format("Path to {0}", KEY_PATH_JAVA_JDK), pathJDK, "../jdk1.8.0_101");
                     break;
                 case RuntimePlatform.WindowsEditor:
-                    path = EditorUtility.OpenFolderPanel(string.Format("Path to {0}", KEY_PATH_JAVA_JDK), pathJDK, @"..\jdk1.6.0_37");
+                    path = EditorUtility.OpenFolderPanel(string.Format("Path to {0}", KEY_PATH_JAVA_JDK), pathJDK, @"..\jdk1.8.0_101");
                     break;
             }
             if (!string.IsNullOrEmpty(path))
@@ -1012,9 +1012,9 @@ namespace com.razerzone.store.sdk.engine.unity
 
                     GUILayout.EndHorizontal();
 
-                    if (GUILayout.Button("Download JDK 6 32-bit"))
+                    if (GUILayout.Button("Download JDK8"))
                     {
-                        Application.OpenURL("http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html#jdk-6u45-oth-JPR");
+                        Application.OpenURL("http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html");
                     }
 
                     break;
