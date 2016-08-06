@@ -88,6 +88,22 @@ public class MainActivity extends Activity {
 		}
 	}
 
+    private void updateFocus() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (null == mInputView) {
+                    if (null != mUnityPlayer) {
+                        mUnityPlayer.requestFocus();
+                    }
+                } else {
+                    mInputView.requestFocus();
+                }
+            }
+        };
+        runOnUiThread(runnable);
+    }
+
 	// Pause Unity
 	@Override
 	protected void onPause() {
@@ -97,9 +113,7 @@ public class MainActivity extends Activity {
 		}
 		Plugin.UnitySendMessage("RazerGameObject", "onPause", "");
         mUnityPlayer.pause();
-		if (null != mInputView) {
-			mInputView.requestFocus();
-		}
+        updateFocus();
 	}
 
 	// Resume Unity
@@ -111,9 +125,7 @@ public class MainActivity extends Activity {
             Log.d(TAG, "RazerGameObject->onResume");
         }
         Plugin.UnitySendMessage("RazerGameObject", "onResume", "");
-        if (null != mInputView) {
-            mInputView.requestFocus();
-        }
+        updateFocus();
     }
 
     // This ensures the layout will be correct.
@@ -126,7 +138,11 @@ public class MainActivity extends Activity {
     @Override public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         mUnityPlayer.windowFocusChanged(hasFocus);
-        if (null != mInputView) {
+        if (null == mInputView) {
+            if (null != mUnityPlayer) {
+                mUnityPlayer.requestFocus();
+            }
+        } else {
             mInputView.requestFocus();
         }
     }
@@ -228,10 +244,9 @@ public class MainActivity extends Activity {
 		if (sEnableInputLogging) {
 			Log.d(TAG, "onGenericMotionEvent");
 		}
+        updateFocus();
         if (null == mInputView) {
             return super.onGenericMotionEvent(motionEvent);
-        } else {
-            mInputView.requestFocus();
         }
 		return true;
 	}
@@ -241,10 +256,9 @@ public class MainActivity extends Activity {
 		if (sEnableInputLogging) {
 			Log.d(TAG, "onKeyUp");
 		}
+        updateFocus();
         if (null == mInputView) {
             return super.onKeyUp(keyCode, keyEvent);
-        } else {
-            mInputView.requestFocus();
         }
 		return true;
 	}
@@ -254,10 +268,9 @@ public class MainActivity extends Activity {
 		if (sEnableInputLogging) {
 			Log.d(TAG, "onKeyDown");
 		}
+        updateFocus();
         if (null == mInputView) {
             return super.onKeyDown(keyCode, keyEvent);
-        } else {
-            mInputView.requestFocus();
         }
 		return true;
 	}
@@ -267,9 +280,7 @@ public class MainActivity extends Activity {
 		if (sEnableLogging) {
 			Log.d(TAG, "onActivityResult START");
 		}
-		if (null != mInputView) {
-			mInputView.requestFocus();
-		}
+        updateFocus();
 		StoreFacadeWrapper storeFacadeWrapper = Plugin.getStoreFacadeWrapper();
 		if (null != storeFacadeWrapper) {
 			if (sEnableLogging) {

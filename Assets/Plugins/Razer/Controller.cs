@@ -165,7 +165,6 @@ namespace com.razerzone.store.sdk
         private static IntPtr _jmGetButtonData = IntPtr.Zero;
         private static IntPtr _jmGetControllerByPlayer = IntPtr.Zero;
         private static IntPtr _jmGetDeviceName = IntPtr.Zero;
-        private static IntPtr _jmShowCursor = IntPtr.Zero;
         private IntPtr _instance = IntPtr.Zero;
 
         static Controller()
@@ -226,22 +225,6 @@ namespace com.razerzone.store.sdk
                     string strMethod = "getButtonData";
                     _jmGetButtonData = AndroidJNI.GetStaticMethodID(_jcController, strMethod, "(I)Lcom/razerzone/store/sdk/Controller$ButtonData;");
                     if (_jmGetButtonData != IntPtr.Zero)
-                    {
-#if VERBOSE_LOGGING
-                        Debug.Log(string.Format("Found {0} method", strMethod));
-#endif
-                    }
-                    else
-                    {
-                        Debug.LogError(string.Format("Failed to find {0} method", strMethod));
-                        return;
-                    }
-                }
-
-                {
-                    string strMethod = "showCursor";
-                    _jmShowCursor = AndroidJNI.GetStaticMethodID(_jcController, strMethod, "(Z)V");
-                    if (_jmShowCursor != IntPtr.Zero)
                     {
 #if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} method", strMethod));
@@ -335,21 +318,6 @@ namespace com.razerzone.store.sdk
             ButtonData retVal = new ButtonData();
             retVal.Instance = result;
             return retVal;
-        }
-
-        public static void showCursor(bool visible)
-        {
-            if (_jcController == IntPtr.Zero)
-            {
-                Debug.LogError("_jcController is not initialized");
-                return;
-            }
-            if (_jmShowCursor == IntPtr.Zero)
-            {
-                Debug.LogError("_jmShowCursor is not initialized");
-                return;
-            }
-            AndroidJNI.CallStaticVoidMethod(_jcController, _jmShowCursor, new jvalue[] { new jvalue() { z = visible } });
         }
 #endif
     }

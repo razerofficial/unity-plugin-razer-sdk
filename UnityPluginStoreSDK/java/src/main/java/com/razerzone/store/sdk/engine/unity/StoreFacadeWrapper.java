@@ -50,11 +50,8 @@ public class StoreFacadeWrapper {
 
     private StoreFacade mStoreFacade = null;
 
-    // InitCompleteListener has initialized
-    private static boolean sInitialized = false;
-
     // listener for init complete
-    private ResponseListener<Bundle> mInitCompleteListener = null;
+    private CancelIgnoringResponseListener<Bundle> mInitCompleteListener = null;
 
     // listener for fetching gamer info
     private ResponseListener<GamerInfo> mRequestGamerInfoListener = null;
@@ -125,45 +122,25 @@ public class StoreFacadeWrapper {
             return;
         }
 
-        Method registerInitCompletedListener = null;
-        try {
-            registerInitCompletedListener = StoreFacade.class.getMethod("registerInitCompletedListener");
-        } catch (Exception e) {
-            // skip
-        }
-
-        try {
-            if (null == registerInitCompletedListener) {
-                sInitialized = true;
-            } else {
-                mInitCompleteListener = new ResponseListener<Bundle>() {
-                    @Override
-                    public void onSuccess(Bundle bundle) {
-                        if (sEnableLogging) {
-                            Log.d(TAG, "InitCompleteListener onSuccess");
-                        }
-                        sInitialized = true;
-                        Log.d(TAG, "initPlugin: RazerGameObject send OnSuccessInitializePlugin");
-                        Plugin.UnitySendMessage("RazerGameObject", "OnSuccessInitializePlugin", "");
-                    }
-
-                    @Override
-                    public void onFailure(int i, String s, Bundle bundle) {
-                        if (sEnableLogging) {
-                            Log.d(TAG, "InitCompleteListener onFailure");
-                        }
-                        Plugin.UnitySendMessage("RazerGameObject", "OnFailureInitializePlugin", "InitCompleteListener onFailure");
-                    }
-
-                    @Override
-                    public void onCancel() {
-                    }
-                };
-                registerInitCompletedListener.invoke(mStoreFacade, mInitCompleteListener);
+        mInitCompleteListener = new CancelIgnoringResponseListener<Bundle>() {
+            @Override
+            public void onSuccess(Bundle bundle) {
+                if (sEnableLogging) {
+                    Log.d(TAG, "InitCompleteListener onSuccess");
+                }
+                Log.d(TAG, "initPlugin: RazerGameObject send OnSuccessInitializePlugin");
+                Plugin.UnitySendMessage("RazerGameObject", "OnSuccessInitializePlugin", "");
             }
-        } catch (Exception e) {
-            // skip
-        }
+
+            @Override
+            public void onFailure(int i, String s, Bundle bundle) {
+                if (sEnableLogging) {
+                    Log.d(TAG, "InitCompleteListener onFailure");
+                }
+                Plugin.UnitySendMessage("RazerGameObject", "OnFailureInitializePlugin", "InitCompleteListener onFailure");
+            }
+        };
+        mStoreFacade.registerInitCompletedListener(mInitCompleteListener);
 
         mRequestGamerInfoListener = new ResponseListener<GamerInfo>() {
             @Override
@@ -629,15 +606,11 @@ public class StoreFacadeWrapper {
     }
 
     public boolean isInitialized() {
-        /*
 		if (null == mStoreFacade) {
 			return false;
 		} else {
 			return mStoreFacade.isInitialized();
 		}
-		*/
-
-        return sInitialized;
     }
 
     public void requestProducts(String[] products) {
