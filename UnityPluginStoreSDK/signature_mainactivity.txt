@@ -38,6 +38,21 @@ public class com.razerzone.store.sdk.engine.unity.MainActivity extends android.a
   public void onActivityResult(int, int, android.content.Intent);
     Signature: (IILandroid/content/Intent;)V
 
+  public void useDefaultInput();
+    Signature: ()V
+
+  static com.razerzone.store.sdk.engine.unity.InputView access$000(com.razerzone.store.sdk.engine.unity.MainActivity);
+    Signature: (Lcom/razerzone/store/sdk/engine/unity/MainActivity;)Lcom/razerzone/store/sdk/engine/unity/InputView;
+
+  static void access$100(com.razerzone.store.sdk.engine.unity.MainActivity);
+    Signature: (Lcom/razerzone/store/sdk/engine/unity/MainActivity;)V
+
+  static java.lang.String access$200();
+    Signature: ()Ljava/lang/String;
+
+  static com.razerzone.store.sdk.engine.unity.InputView access$002(com.razerzone.store.sdk.engine.unity.MainActivity, com.razerzone.store.sdk.engine.unity.InputView);
+    Signature: (Lcom/razerzone/store/sdk/engine/unity/MainActivity;Lcom/razerzone/store/sdk/engine/unity/InputView;)Lcom/razerzone/store/sdk/engine/unity/InputView;
+
   static {};
     Signature: ()V
 }

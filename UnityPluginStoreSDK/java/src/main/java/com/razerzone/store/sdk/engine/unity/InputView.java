@@ -97,11 +97,15 @@ public class InputView extends View {
 	}
 
 	public void shutdown() {
-		Activity activity = ((Activity) getContext());
-		if (null != activity) {
-			InputMapper.shutdown(activity);
-		} else {
-			Log.e(TAG, "Activity was not found.");
+		try {
+			Activity activity = ((Activity) getContext());
+			if (null != activity) {
+				InputMapper.shutdown(activity);
+			} else {
+				Log.e(TAG, "Activity was not found.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

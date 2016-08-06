@@ -657,6 +657,7 @@ namespace com.razerzone.store.sdk.engine.unity
             "ExampleAudio",
             "ExampleBilling",
             "ExampleCommunityContent",
+            "ExampleDefaultInput",
             "ExampleJS",
             "ExampleSafeArea",
             "ExampleVirtualController",
@@ -956,7 +957,7 @@ namespace com.razerzone.store.sdk.engine.unity
 
                     if (GUILayout.Button("Read Razer Unity Docs"))
                     {
-						Application.OpenURL("https://github.com/razerofficial/unity-plugin-razer-sdk");
+                        Application.OpenURL("https://github.com/razerofficial/unity-plugin-razer-sdk");
                     }
 
                     if (GUILayout.Button("Razer Developer Portal"))
@@ -1086,14 +1087,14 @@ namespace com.razerzone.store.sdk.engine.unity
                                                                  string currentDirectory = Directory.GetCurrentDirectory();
                                                                  if (File.Exists(pathADB))
                                                                  {
-                                                                 //Debug.Log(appPath);
-                                                                 //Debug.Log(pathADB);
-                                                                 string args =
-                                                                         string.Format(
-                                                                             @"shell /system/bin/screencap -p /sdcard/screenshot.png");
-                                                                 //Debug.Log(args);
-                                                                 ProcessStartInfo ps = new ProcessStartInfo(pathADB,
-                                                                                                                args);
+                                                                     //Debug.Log(appPath);
+                                                                     //Debug.Log(pathADB);
+                                                                     string args =
+                                                                             string.Format(
+                                                                                 @"shell /system/bin/screencap -p /sdcard/screenshot.png");
+                                                                     //Debug.Log(args);
+                                                                     ProcessStartInfo ps = new ProcessStartInfo(pathADB,
+                                                                                                                    args);
                                                                      Process p = new Process();
                                                                      ps.RedirectStandardOutput = false;
                                                                      ps.UseShellExecute = true;
@@ -1112,9 +1113,9 @@ namespace com.razerzone.store.sdk.engine.unity
                                                                      string args2 =
                                                                          string.Format(
                                                                              @"pull /sdcard/screenshot.png screenshot.png");
-                                                                 //Debug.Log(args2);
-                                                                 ProcessStartInfo ps2 = new ProcessStartInfo(pathADB,
-                                                                                                                 args2);
+                                                                     //Debug.Log(args2);
+                                                                     ProcessStartInfo ps2 = new ProcessStartInfo(pathADB,
+                                                                                                                     args2);
                                                                      Process p2 = new Process();
                                                                      ps2.RedirectStandardOutput = false;
                                                                      ps2.UseShellExecute = true;
@@ -1132,13 +1133,13 @@ namespace com.razerzone.store.sdk.engine.unity
                                                                      string shellPath = @"c:\windows\system32\cmd.exe";
                                                                      if (File.Exists(shellPath))
                                                                      {
-                                                                     //Debug.Log(appPath);
-                                                                     //Debug.Log(pathADB);
-                                                                     string args3 =
-                                                                             string.Format(@"/c start screenshot.png");
-                                                                     //Debug.Log(args3);
-                                                                     ProcessStartInfo ps3 =
-                                                                             new ProcessStartInfo(shellPath, args3);
+                                                                         //Debug.Log(appPath);
+                                                                         //Debug.Log(pathADB);
+                                                                         string args3 =
+                                                                                 string.Format(@"/c start screenshot.png");
+                                                                         //Debug.Log(args3);
+                                                                         ProcessStartInfo ps3 =
+                                                                                 new ProcessStartInfo(shellPath, args3);
                                                                          Process p3 = new Process();
                                                                          ps3.RedirectStandardOutput = false;
                                                                          ps3.UseShellExecute = true;
@@ -1150,8 +1151,8 @@ namespace com.razerzone.store.sdk.engine.unity
                                                                                               p3.Dispose();
                                                                                           };
                                                                          p3.Start();
-                                                                     //p.WaitForExit();
-                                                                 }
+                                                                         //p.WaitForExit();
+                                                                     }
                                                                  }
                                                              });
                         Thread thread = new Thread(ts);

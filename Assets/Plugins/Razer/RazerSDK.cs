@@ -33,14 +33,17 @@ namespace com.razerzone.store.sdk.engine.unity
 {
     public static class RazerSDK
     {
-        public const string PLUGIN_VERSION = "2.1.0.5";
+        public const string PLUGIN_VERSION = "2.1.0.6";
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 
         /// <summary>
         /// Dictionary for quick localization string lookup
         /// </summary>
-        private static Dictionary<string, string> m_stringResources = new Dictionary<string, string>();
+        private static Dictionary<string, string> s_stringResources = new Dictionary<string, string>();
+
+        // When true, disables plugin input handling
+        private static bool s_useDefaultInput = false;
 
         static RazerSDK()
         {
@@ -48,6 +51,11 @@ namespace com.razerzone.store.sdk.engine.unity
             AndroidJNI.AttachCurrentThread();
 
             new Plugin(UnityPlayer.currentActivity);
+        }
+
+        public static bool GetUseDefaultInput()
+        {
+            return s_useDefaultInput;
         }
 
         public class NdkWrapper
@@ -158,6 +166,11 @@ namespace com.razerzone.store.sdk.engine.unity
 
             public static void UpdateInputFrame()
             {
+                if (GetUseDefaultInput())
+                {
+                    return;
+                }
+
                 lock (m_lockObject)
                 {
                     for (int deviceId = 0; deviceId < Controller.MAX_CONTROLLERS; ++deviceId)
@@ -576,22 +589,22 @@ namespace com.razerzone.store.sdk.engine.unity
 #endif
         }
 
-		public enum ProductType
-		{
-			ENTITLEMENT,
-			CONSUMABLE,
-			SUBSCRIPTION,
-			UNKNOWN
-		}
+        public enum ProductType
+        {
+            ENTITLEMENT,
+            CONSUMABLE,
+            SUBSCRIPTION,
+            UNKNOWN
+        }
 
-		public static void requestPurchase(String identifier, ProductType productType)
+        public static void requestPurchase(String identifier, ProductType productType)
         {
             if (!isIAPInitComplete())
             {
                 return;
             }
 #if UNITY_ANDROID && !UNITY_EDITOR
-			Plugin.requestPurchase(identifier, productType.ToString());
+            Plugin.requestPurchase(identifier, productType.ToString());
 #endif
         }
 
@@ -659,12 +672,12 @@ namespace com.razerzone.store.sdk.engine.unity
                 return string.Empty;
             }
 #if UNITY_ANDROID && !UNITY_EDITOR
-            if (m_stringResources.ContainsKey(key))
+            if (s_stringResources.ContainsKey(key))
             {
-                return m_stringResources[key];
+                return s_stringResources[key];
             }
             string val = Plugin.getStringResource(key);
-            m_stringResources.Add(key, val);
+            s_stringResources.Add(key, val);
             return val;
 #else
             return string.Empty;
@@ -684,7 +697,7 @@ namespace com.razerzone.store.sdk.engine.unity
             Plugin.shutdown();
 #endif
         }
-		
+
         /// <summary>
         /// Quit the application
         /// </summary>
@@ -694,6 +707,28 @@ namespace com.razerzone.store.sdk.engine.unity
             Plugin.quit();
 #endif
         }
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+
+        /// <summary>
+        /// Use default input, bypass plugin input
+        /// </summary>
+        public static void useDefaultInput()
+        {
+            if (!isIAPInitComplete())
+            {
+                return;
+            }
+            Plugin.useDefaultInput();
+            ControllerInput.ClearAxes();
+            ControllerInput.ClearButtons();
+            ControllerInput.ClearButtonStates();
+            ControllerInput.ClearButtonStates();
+            ControllerInput.UpdateInputFrame();
+            s_useDefaultInput = true;
+        }
+
+#endif
 
         #endregion
 

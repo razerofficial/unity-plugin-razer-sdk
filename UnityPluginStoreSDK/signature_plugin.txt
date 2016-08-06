@@ -132,6 +132,9 @@ public class com.razerzone.store.sdk.engine.unity.Plugin {
   public static void quit();
     Signature: ()V
 
+  public static void useDefaultInput();
+    Signature: ()V
+
   static java.lang.String access$000();
     Signature: ()Ljava/lang/String;
 

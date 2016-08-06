@@ -16,7 +16,7 @@ namespace com.razerzone.store.sdk.engine.unity
         private static IntPtr _jmConstructor = IntPtr.Zero;
         private static IntPtr _jmInitPlugin = IntPtr.Zero;
         private static IntPtr _jmIsInitialized = IntPtr.Zero;
-		private static IntPtr _jmGetDeviceHardwareName = IntPtr.Zero;
+        private static IntPtr _jmGetDeviceHardwareName = IntPtr.Zero;
         private static IntPtr _jmGetGameData = IntPtr.Zero;
         private static IntPtr _jmPutGameData = IntPtr.Zero;
         private static IntPtr _jmRequestGamerInfo = IntPtr.Zero;
@@ -41,7 +41,8 @@ namespace com.razerzone.store.sdk.engine.unity
         private static IntPtr _jmGetGameModScreenshotArray = IntPtr.Zero;
         private static IntPtr _jmGetStringArray = IntPtr.Zero;
         private static IntPtr _jmShutdown = IntPtr.Zero;
-		private static IntPtr _jmQuit = IntPtr.Zero;
+        private static IntPtr _jmQuit = IntPtr.Zero;
+        private static IntPtr _jmUseDefaultInput = IntPtr.Zero;
         private IntPtr _instance = IntPtr.Zero;
 
         /// <summary>
@@ -149,21 +150,21 @@ namespace com.razerzone.store.sdk.engine.unity
                     }
                 }
 
-				{
-					string strMethod = "getDeviceHardwareName";
-					_jmGetDeviceHardwareName = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "()Ljava/lang/String;");
-					if (_jmGetDeviceHardwareName != IntPtr.Zero)
-					{
+                {
+                    string strMethod = "getDeviceHardwareName";
+                    _jmGetDeviceHardwareName = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "()Ljava/lang/String;");
+                    if (_jmGetDeviceHardwareName != IntPtr.Zero)
+                    {
 #if VERBOSE_LOGGING
 						Debug.Log(string.Format("Found {0} method", strMethod));
 #endif
-					}
-					else
-					{
-						Debug.LogError(string.Format("Failed to find {0} method", strMethod));
-						return;
-					}
-				}
+                    }
+                    else
+                    {
+                        Debug.LogError(string.Format("Failed to find {0} method", strMethod));
+                        return;
+                    }
+                }
 
                 {
                     string strMethod = "getGameData";
@@ -231,7 +232,7 @@ namespace com.razerzone.store.sdk.engine.unity
 
                 {
                     string strMethod = "requestPurchase";
-					_jmRequestPurchase = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "(Ljava/lang/String;Ljava/lang/String;)V");
+                    _jmRequestPurchase = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "(Ljava/lang/String;Ljava/lang/String;)V");
                     if (_jmRequestPurchase != IntPtr.Zero)
                     {
 #if VERBOSE_LOGGING
@@ -548,11 +549,27 @@ namespace com.razerzone.store.sdk.engine.unity
                         return;
                     }
                 }
-				
+
                 {
                     string strMethod = "quit";
                     _jmQuit = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "()V");
                     if (_jmQuit != IntPtr.Zero)
+                    {
+#if VERBOSE_LOGGING
+                        Debug.Log(string.Format("Found {0} method", strMethod));
+#endif
+                    }
+                    else
+                    {
+                        Debug.LogError(string.Format("Failed to find {0} method", strMethod));
+                        return;
+                    }
+                }
+
+                {
+                    string strMethod = "useDefaultInput";
+                    _jmUseDefaultInput = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "()V");
+                    if (_jmUseDefaultInput != IntPtr.Zero)
                     {
 #if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} method", strMethod));
@@ -624,35 +641,35 @@ namespace com.razerzone.store.sdk.engine.unity
             return AndroidJNI.CallStaticBooleanMethod(_jcPlugin, _jmIsInitialized, new jvalue[] { });
         }
 
-		public static string getDeviceHardwareName()
-		{
+        public static string getDeviceHardwareName()
+        {
 #if VERBOSE_LOGGING
 			Debug.Log(string.Format("Invoking {0}...", MethodBase.GetCurrentMethod().Name));
 #endif
-			JNIFind();
-			
-			if (_jcPlugin == IntPtr.Zero)
-			{
-				Debug.LogError("_jcPlugin is not initialized");
-				return null;
-			}
-			if (_jmGetDeviceHardwareName == IntPtr.Zero)
-			{
-				Debug.LogError("_jmGetDeviceHardwareName is not initialized");
-				return null;
-			}
-			IntPtr result = AndroidJNI.CallStaticObjectMethod(_jcPlugin, _jmGetDeviceHardwareName, new jvalue[0]);
+            JNIFind();
 
-			if (result == IntPtr.Zero)
-			{
-				Debug.LogError("Failed to getDeviceHardwareName");
-				return null;
-			}
-			
-			String retVal = AndroidJNI.GetStringUTFChars(result);
-			AndroidJNI.DeleteLocalRef(result);
-			return retVal;
-		}
+            if (_jcPlugin == IntPtr.Zero)
+            {
+                Debug.LogError("_jcPlugin is not initialized");
+                return null;
+            }
+            if (_jmGetDeviceHardwareName == IntPtr.Zero)
+            {
+                Debug.LogError("_jmGetDeviceHardwareName is not initialized");
+                return null;
+            }
+            IntPtr result = AndroidJNI.CallStaticObjectMethod(_jcPlugin, _jmGetDeviceHardwareName, new jvalue[0]);
+
+            if (result == IntPtr.Zero)
+            {
+                Debug.LogError("Failed to getDeviceHardwareName");
+                return null;
+            }
+
+            String retVal = AndroidJNI.GetStringUTFChars(result);
+            AndroidJNI.DeleteLocalRef(result);
+            return retVal;
+        }
 
         public static string getGameData(string key)
         {
@@ -792,10 +809,10 @@ namespace com.razerzone.store.sdk.engine.unity
             m_pendingRequestPurchase = true;
 
             IntPtr arg1 = AndroidJNI.NewStringUTF(identifier);
-			IntPtr arg2 = AndroidJNI.NewStringUTF(productType);
-			AndroidJNI.CallStaticVoidMethod(_jcPlugin, _jmRequestPurchase, new jvalue[] { new jvalue() { l = arg1 }, new jvalue() { l = arg2 } });
+            IntPtr arg2 = AndroidJNI.NewStringUTF(productType);
+            AndroidJNI.CallStaticVoidMethod(_jcPlugin, _jmRequestPurchase, new jvalue[] { new jvalue() { l = arg1 }, new jvalue() { l = arg2 } });
             AndroidJNI.DeleteLocalRef(arg1);
-			AndroidJNI.DeleteLocalRef(arg2);
+            AndroidJNI.DeleteLocalRef(arg2);
         }
 
         public static void requestReceipts()
@@ -1396,7 +1413,7 @@ namespace com.razerzone.store.sdk.engine.unity
 
             AndroidJNI.CallStaticVoidMethod(_jcPlugin, method, new jvalue[] { });
         }
-		
+
         public static void quit()
         {
 #if VERBOSE_LOGGING
@@ -1410,6 +1427,35 @@ namespace com.razerzone.store.sdk.engine.unity
             }
 
             string strMethod = "quit";
+            IntPtr method = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "()V");
+            if (method != IntPtr.Zero)
+            {
+#if VERBOSE_LOGGING
+                Debug.Log(string.Format("Found {0} method", strMethod));
+#endif
+            }
+            else
+            {
+                Debug.LogError(string.Format("Failed to find {0} method", strMethod));
+                return;
+            }
+
+            AndroidJNI.CallStaticVoidMethod(_jcPlugin, method, new jvalue[] { });
+        }
+
+        public static void useDefaultInput()
+        {
+#if VERBOSE_LOGGING
+            Debug.Log(string.Format("Invoking {0}...", MethodBase.GetCurrentMethod().Name));
+#endif
+
+            if (_jcPlugin == IntPtr.Zero)
+            {
+                Debug.LogError("_jcPlugin is not initialized");
+                return;
+            }
+
+            string strMethod = "useDefaultInput";
             IntPtr method = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "()V");
             if (method != IntPtr.Zero)
             {

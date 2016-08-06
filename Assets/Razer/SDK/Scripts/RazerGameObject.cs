@@ -30,7 +30,10 @@ namespace com.razerzone.store.sdk.engine.unity
         public string m_secretApiKey = "";
 
         #region Private Variables
-        private static RazerGameObject m_instance = null;
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
+        private static RazerGameObject s_instance = null;
         #endregion
 
         #region Singleton Accessor Class
@@ -41,15 +44,15 @@ namespace com.razerzone.store.sdk.engine.unity
         {
             get
             {
-                if (null == m_instance)
+                if (null == s_instance)
                 {
                     GameObject razerGameObject = GameObject.Find("RazerGameObject");
                     if (razerGameObject)
                     {
-                        m_instance = razerGameObject.GetComponent<RazerGameObject>();
+                        s_instance = razerGameObject.GetComponent<RazerGameObject>();
                     }
                 }
-                return m_instance;
+                return s_instance;
             }
         }
         #endregion
@@ -609,7 +612,7 @@ namespace com.razerzone.store.sdk.engine.unity
         #region UNITY Awake, Start & Update
         void Awake()
         {
-            m_instance = this;
+            s_instance = this;
 #if UNITY_ANDROID && !UNITY_EDITOR
             Debug.Log(string.Format("RazerPluginVersion: VERSION={0}", RazerSDK.PLUGIN_VERSION));
 #endif
@@ -626,26 +629,26 @@ namespace com.razerzone.store.sdk.engine.unity
         #region Controllers
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-        private bool m_waitForExit = true;
-        void OnDestroy()
-        {
-            m_waitForExit = false;
-        }
-        void OnApplicationQuit()
-        {
-            m_waitForExit = false;
-        }
         public void Update()
         {
+            if (RazerSDK.GetUseDefaultInput())
+            {
+                return;
+            }
             RazerSDK.ControllerInput.UpdateInputFrame();
             RazerSDK.ControllerInput.ClearButtonStates();
         }
-#endif
 
         private void FixedUpdate()
         {
+            if (RazerSDK.GetUseDefaultInput())
+            {
+                return;
+            }
             RazerSDK.UpdateJoysticks();
         }
+
+#endif
 
         #endregion
 
