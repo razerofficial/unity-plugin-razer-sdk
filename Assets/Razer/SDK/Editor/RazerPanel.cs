@@ -702,22 +702,18 @@ namespace com.razerzone.store.sdk.engine.unity
 
                     if (GUILayout.Button("Stop", GUILayout.MaxWidth(position.width)))
                     {
-                        string appPath = string.Format("{0}/{1}", pathUnityProject, apkName);
-                        if (File.Exists(appPath))
+                        //Debug.Log(appPath);
+                        //Debug.Log(pathADB);
+                        string args = string.Format("shell am force-stop {0}", PlayerSettings.bundleIdentifier);
+                        //Debug.Log(args);
+                        ProcessStartInfo ps = new ProcessStartInfo(pathADB, args);
+                        Process p = new Process();
+                        p.StartInfo = ps;
+                        p.Exited += (object sender, EventArgs e) =>
                         {
-                            //Debug.Log(appPath);
-                            //Debug.Log(pathADB);
-                            string args = string.Format("shell am force-stop {0}", PlayerSettings.bundleIdentifier);
-                            //Debug.Log(args);
-                            ProcessStartInfo ps = new ProcessStartInfo(pathADB, args);
-                            Process p = new Process();
-                            p.StartInfo = ps;
-                            p.Exited += (object sender, EventArgs e) =>
-                            {
-                                p.Dispose();
-                            };
-                            p.Start();
-                        }
+                            p.Dispose();
+                        };
+                        p.Start();
                     }
 
                     if (GUILayout.Button("Reinstall", GUILayout.MaxWidth(position.width)))
