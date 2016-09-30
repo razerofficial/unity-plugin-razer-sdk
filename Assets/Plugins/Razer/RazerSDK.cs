@@ -535,6 +535,17 @@ namespace com.razerzone.store.sdk.engine.unity
 
         #region Mirror Java API
 
+        public static void requestLogin()
+        {
+            if (!isIAPInitComplete())
+            {
+                return;
+            }
+#if UNITY_ANDROID && !UNITY_EDITOR
+            Plugin.requestLogin();
+#endif
+        }
+
         public static void requestGamerInfo()
         {
             if (!isIAPInitComplete())
@@ -806,6 +817,29 @@ namespace com.razerzone.store.sdk.engine.unity
                 if (jsonData.has("developerName"))
                 {
                     result.developerName = jsonData.getString("developerName");
+                }
+                return result;
+            }
+#endif
+        }
+
+        [Serializable]
+        public class PurchaseResult
+        {
+            public string identifier = string.Empty;
+            public string ownerId = string.Empty;
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+            public static PurchaseResult Parse(JSONObject jsonData)
+            {
+                PurchaseResult result = new PurchaseResult();
+                if (jsonData.has("identifier"))
+                {
+                    result.identifier = jsonData.getString("identifier");
+                }
+                if (jsonData.has("ownerId"))
+                {
+                    result.ownerId = jsonData.getString("ownerId");
                 }
                 return result;
             }
@@ -1187,6 +1221,36 @@ namespace com.razerzone.store.sdk.engine.unity
 
         #endregion
 
+        #region Request Login Listener
+
+        public interface IRequestLoginListener
+        {
+            void RequestLoginOnSuccess();
+            void RequestLoginOnFailure(int errorCode, string errorMessage);
+            void RequestLoginOnCancel();
+        }
+        private static List<IRequestLoginListener> m_requestLoginListeners = new List<IRequestLoginListener>();
+        public static List<IRequestLoginListener> getRequestLoginListeners()
+        {
+            return m_requestLoginListeners;
+        }
+        public static void registerRequestLoginListener(IRequestLoginListener listener)
+        {
+            if (!m_requestLoginListeners.Contains(listener))
+            {
+                m_requestLoginListeners.Add(listener);
+            }
+        }
+        public static void unregisterRequestLoginListener(IRequestLoginListener listener)
+        {
+            if (m_requestLoginListeners.Contains(listener))
+            {
+                m_requestLoginListeners.Remove(listener);
+            }
+        }
+
+        #endregion
+
         #region Request Gamer Info Listener
 
         public interface IRequestGamerInfoListener
@@ -1251,7 +1315,7 @@ namespace com.razerzone.store.sdk.engine.unity
 
         public interface IRequestPurchaseListener
         {
-            void RequestPurchaseOnSuccess(RazerSDK.Product product);
+            void RequestPurchaseOnSuccess(RazerSDK.PurchaseResult purchaseResult);
             void RequestPurchaseOnFailure(int errorCode, string errorMessage);
             void RequestPurchaseOnCancel();
         }

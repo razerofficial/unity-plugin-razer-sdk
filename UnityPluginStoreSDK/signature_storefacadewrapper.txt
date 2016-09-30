@@ -15,6 +15,9 @@ public class com.razerzone.store.sdk.engine.unity.StoreFacadeWrapper {
   public void requestProducts(java.lang.String[]);
     Signature: ([Ljava/lang/String;)V
 
+  public void requestLogin();
+    Signature: ()V
+
   public void requestGamerInfo();
     Signature: ()V
 
@@ -57,10 +60,7 @@ public class com.razerzone.store.sdk.engine.unity.StoreFacadeWrapper {
   public java.lang.String getDeviceHardwareName();
     Signature: ()Ljava/lang/String;
 
-  static boolean access$002(boolean);
-    Signature: (Z)Z
-
-  static java.lang.String access$100();
+  static java.lang.String access$000();
     Signature: ()Ljava/lang/String;
 
   static {};

@@ -53,7 +53,10 @@ public class StoreFacadeWrapper {
     // listener for init complete
     private CancelIgnoringResponseListener<Bundle> mInitCompleteListener = null;
 
-    // listener for fetching gamer info
+    // listener for request login
+    private ResponseListener<Void> mRequestLoginListener = null;
+
+    // listener for request gamer info
     private ResponseListener<GamerInfo> mRequestGamerInfoListener = null;
 
     // listener for getting products
@@ -140,7 +143,47 @@ public class StoreFacadeWrapper {
                 Plugin.UnitySendMessage("RazerGameObject", "OnFailureInitializePlugin", "InitCompleteListener onFailure");
             }
         };
-        mStoreFacade.registerInitCompletedListener(mInitCompleteListener);
+
+        mRequestLoginListener = new ResponseListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                if (sEnableLogging) {
+                    Log.d(TAG, "RequestLoginListener onSuccess");
+                }
+
+                String ignore = "";
+                Plugin.UnitySendMessage("RazerGameObject", "RequestLoginSuccessListener", ignore);
+            }
+
+            @Override
+            public void onFailure(int errorCode, String errorMessage, Bundle bundle) {
+                if (sEnableLogging) {
+                    Log.d(TAG, "RequestLoginListener onFailure");
+                }
+
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("errorCode", errorCode);
+                    if (null == errorMessage) {
+                        json.put("errorMessage", "");
+                    } else {
+                        json.put("errorMessage", errorMessage);
+                    }
+                } catch (JSONException e1) {
+                }
+                String jsonData = json.toString();
+                Plugin.UnitySendMessage("RazerGameObject", "RequestLoginFailureListener", jsonData);
+            }
+
+            @Override
+            public void onCancel() {
+                if (sEnableLogging) {
+                    Log.d(TAG, "RequestLoginListener onCancel");
+                }
+                String ignore = "";
+                Plugin.UnitySendMessage("RazerGameObject", "RequestLoginCancelListener", ignore);
+            }
+        };
 
         mRequestGamerInfoListener = new ResponseListener<GamerInfo>() {
             @Override
@@ -177,12 +220,16 @@ public class StoreFacadeWrapper {
                 } catch (JSONException e1) {
                 }
                 String jsonData = json.toString();
-
                 Plugin.UnitySendMessage("RazerGameObject", "RequestGamerInfoFailureListener", jsonData);
             }
 
             @Override
             public void onCancel() {
+                if (sEnableLogging) {
+                    Log.d(TAG, "RequestGamerInfoListener onCancel");
+                }
+                String ignore = "";
+                Plugin.UnitySendMessage("RazerGameObject", "RequestGamerInfoCancelListener", ignore);
             }
         };
 
@@ -255,10 +302,13 @@ public class StoreFacadeWrapper {
                     JSONObject json = new JSONObject();
                     try {
                         json.put("identifier", result.getProductIdentifier());
+                        json.put("ownerId", result.getOrderId());
                     } catch (JSONException e) {
                     }
                     String jsonData = json.toString();
-
+                    if (sEnableLogging) {
+                        Log.d(TAG, "RequestPurchaseListener onSuccess: jsonData="+jsonData);
+                    }
                     Plugin.UnitySendMessage("RazerGameObject", "RequestPurchaseSuccessListener", jsonData);
                 }
             }
@@ -354,8 +404,6 @@ public class StoreFacadeWrapper {
                 if (sEnableLogging) {
                     Log.d(TAG, "RequestReceiptsListener onCancel");
                 }
-
-                //Log.d(TAG, "PurchaseListener Invoke ReceiptListCancelListener");
                 Plugin.UnitySendMessage("RazerGameObject", "RequestReceiptsCancelListener", "");
             }
         };
@@ -377,7 +425,7 @@ public class StoreFacadeWrapper {
         };
 
         try {
-            mStoreFacade.init(activity, developerInfo);
+            mStoreFacade.init(activity, developerInfo, mInitCompleteListener);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -625,6 +673,21 @@ public class StoreFacadeWrapper {
             mStoreFacade.requestProductList(Plugin.getActivity(), products, mRequestProductsListener);
         } else {
             Log.e(TAG, "mRequestProductsListener is null");
+        }
+    }
+
+    public void requestLogin() {
+        if (sEnableLogging) {
+            Log.d(TAG, "requestLogin");
+        }
+        if (null == mStoreFacade) {
+            Log.e(TAG, "requestLogin: StoreFacade is null!");
+            return;
+        }
+        if (null != mRequestLoginListener) {
+            mStoreFacade.requestLogin(Plugin.getActivity(), mRequestLoginListener);
+        } else {
+            Log.e(TAG, "StoreFacadeWrapper.requestLogin mRequestLoginListener is null");
         }
     }
 

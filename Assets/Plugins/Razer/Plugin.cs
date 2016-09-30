@@ -19,6 +19,7 @@ namespace com.razerzone.store.sdk.engine.unity
         private static IntPtr _jmGetDeviceHardwareName = IntPtr.Zero;
         private static IntPtr _jmGetGameData = IntPtr.Zero;
         private static IntPtr _jmPutGameData = IntPtr.Zero;
+        private static IntPtr _jmRequestLogin = IntPtr.Zero;
         private static IntPtr _jmRequestGamerInfo = IntPtr.Zero;
         private static IntPtr _jmRequestProducts = IntPtr.Zero;
         private static IntPtr _jmRequestPurchase = IntPtr.Zero;
@@ -44,31 +45,6 @@ namespace com.razerzone.store.sdk.engine.unity
         private static IntPtr _jmQuit = IntPtr.Zero;
         private static IntPtr _jmUseDefaultInput = IntPtr.Zero;
         private IntPtr _instance = IntPtr.Zero;
-
-        /// <summary>
-        /// Make one request at a time
-        /// </summary>
-        public static bool m_pendingRequestGamerInfo = false;
-
-        /// <summary>
-        /// Make one request at a time
-        /// </summary>
-        public static bool m_pendingRequestProducts = false;
-
-        /// <summary>
-        /// Make one request at a time
-        /// </summary>
-        public static bool m_pendingRequestPurchase = false;
-
-        /// <summary>
-        /// Make one request at a time
-        /// </summary>
-        public static bool m_pendingRequestReceipts = false;
-
-        /// <summary>
-        /// Make one request at a time
-        /// </summary>
-        public static bool m_pendingShutdown = false;
 
         static Plugin()
         {
@@ -186,6 +162,22 @@ namespace com.razerzone.store.sdk.engine.unity
                     string strMethod = "putGameData";
                     _jmPutGameData = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "(Ljava/lang/String;Ljava/lang/String;)V");
                     if (_jmPutGameData != IntPtr.Zero)
+                    {
+#if VERBOSE_LOGGING
+                        Debug.Log(string.Format("Found {0} method", strMethod));
+#endif
+                    }
+                    else
+                    {
+                        Debug.LogError(string.Format("Failed to find {0} method", strMethod));
+                        return;
+                    }
+                }
+
+                {
+                    string strMethod = "requestLogin";
+                    _jmRequestLogin = AndroidJNI.GetStaticMethodID(_jcPlugin, strMethod, "()V");
+                    if (_jmRequestLogin != IntPtr.Zero)
                     {
 #if VERBOSE_LOGGING
                         Debug.Log(string.Format("Found {0} method", strMethod));
@@ -726,6 +718,27 @@ namespace com.razerzone.store.sdk.engine.unity
             AndroidJNI.DeleteLocalRef(arg2);
         }
 
+        public static void requestLogin()
+        {
+#if VERBOSE_LOGGING
+            Debug.Log(string.Format("Invoking {0}...", MethodBase.GetCurrentMethod().Name));
+#endif
+            JNIFind();
+
+            if (_jcPlugin == IntPtr.Zero)
+            {
+                Debug.LogError("_jcPlugin is not initialized");
+                return;
+            }
+            if (_jmRequestLogin == IntPtr.Zero)
+            {
+                Debug.LogError("_jmRequestLogin is not initialized");
+                return;
+            }
+
+            AndroidJNI.CallStaticVoidMethod(_jcPlugin, _jmRequestLogin, new jvalue[0]);
+        }
+
         public static void requestGamerInfo()
         {
 #if VERBOSE_LOGGING
@@ -743,13 +756,6 @@ namespace com.razerzone.store.sdk.engine.unity
                 Debug.LogError("_jmRequestGamerInfo is not initialized");
                 return;
             }
-
-            // Make one request at a time
-            if (m_pendingRequestGamerInfo)
-            {
-                return;
-            }
-            m_pendingRequestGamerInfo = true;
 
             AndroidJNI.CallStaticVoidMethod(_jcPlugin, _jmRequestGamerInfo, new jvalue[0]);
         }
@@ -772,13 +778,6 @@ namespace com.razerzone.store.sdk.engine.unity
                 return;
             }
 
-            // Make one request at a time
-            if (m_pendingRequestProducts)
-            {
-                return;
-            }
-            m_pendingRequestProducts = true;
-
             IntPtr arg1 = AndroidJNI.NewStringUTF(jsonData);
             AndroidJNI.CallStaticVoidMethod(_jcPlugin, _jmRequestProducts, new jvalue[] { new jvalue() { l = arg1 } });
         }
@@ -800,13 +799,6 @@ namespace com.razerzone.store.sdk.engine.unity
                 Debug.LogError("_jmRequestPurchase is not initialized");
                 return;
             }
-
-            // Make one request at a time
-            if (m_pendingRequestPurchase)
-            {
-                return;
-            }
-            m_pendingRequestPurchase = true;
 
             IntPtr arg1 = AndroidJNI.NewStringUTF(identifier);
             IntPtr arg2 = AndroidJNI.NewStringUTF(productType);
@@ -832,13 +824,6 @@ namespace com.razerzone.store.sdk.engine.unity
                 Debug.LogError("_jmRequestReceipts is not initialized");
                 return;
             }
-
-            // Make one request at a time
-            if (m_pendingRequestReceipts)
-            {
-                return;
-            }
-            m_pendingRequestReceipts = true;
 
             AndroidJNI.CallStaticVoidMethod(_jcPlugin, _jmRequestReceipts, new jvalue[0]);
         }

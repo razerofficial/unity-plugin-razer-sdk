@@ -175,7 +175,9 @@ public class Plugin {
                         }
 
                         if (null == registerInitCompletedListener) {
-                            Log.i(TAG, "initPlugin: RazerGameObject send OnSuccessInitializePlugin");
+                            if (sEnableLogging) {
+                                Log.d(TAG, "initPlugin: RazerGameObject send OnSuccessInitializePlugin");
+                            }
                             UnitySendMessage("RazerGameObject", "OnSuccessInitializePlugin", "");
                         }
                     } catch (Exception e) {
@@ -207,7 +209,9 @@ public class Plugin {
 
     public static void putGameData(String key, String val) {
         try {
-            //Log.i(TAG, "putGameData: key=" + key + " val=" + val);
+            if (sEnableLogging) {
+                Log.d(TAG, "putGameData: key=" + key + " val=" + val);
+            }
             StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
             if (null == storeFacadeWrapper) {
                 Log.e(TAG, "putGameData: storeFacadeWrapper is null!");
@@ -222,7 +226,9 @@ public class Plugin {
     public static String getGameData(String key) {
         String result = null;
         try {
-            //Log.i(TAG, "getGameData");
+            if (sEnableLogging) {
+                Log.d(TAG, "getGameData");
+            }
             StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
             if (null == storeFacadeWrapper) {
                 Log.e(TAG, "getGameData: storeFacadeWrapper is null!");
@@ -233,6 +239,33 @@ public class Plugin {
             Log.e(TAG, "getGameData: exception=" + e.toString());
         }
         return result;
+    }
+
+    public static void requestLogin() {
+        Activity activity = getActivity();
+        if (null == activity) {
+            Log.e(TAG, "requestLogin: Activity is null!");
+            return;
+        }
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (sEnableLogging) {
+                        Log.d(TAG, "requestLogin");
+                    }
+                    StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
+                    if (null == storeFacadeWrapper) {
+                        Log.e(TAG, "requestLogin: storeFacadeWrapper is null!");
+                    } else {
+                        storeFacadeWrapper.requestLogin();
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "requestLogin: exception=" + e.toString());
+                }
+            }
+        };
+        activity.runOnUiThread(runnable);
     }
 
     public static void requestGamerInfo() {
@@ -246,7 +279,7 @@ public class Plugin {
             public void run() {
                 try {
                     if (sEnableLogging) {
-                        Log.i(TAG, "requestGamerInfo");
+                        Log.d(TAG, "requestGamerInfo");
                     }
                     StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
                     if (null == storeFacadeWrapper) {
@@ -264,7 +297,9 @@ public class Plugin {
 
     public static void requestProducts(String jsonData) {
         try {
-            //Log.i(TAG, "requestProducts");
+            if (sEnableLogging) {
+                Log.d(TAG, "requestProducts");
+            }
             StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
             if (null == storeFacadeWrapper) {
                 Log.e(TAG, "requestProducts: storeFacadeWrapper is null!");
@@ -292,7 +327,9 @@ public class Plugin {
 
     public static void requestPurchase(String productId, String productType) {
         try {
-            //Log.i(TAG, "requestPurchase: productId=" + productId+" productType="+productType);
+            if (sEnableLogging) {
+                Log.d(TAG, "requestPurchase: productId=" + productId + " productType=" + productType);
+            }
             StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
             if (null == storeFacadeWrapper) {
                 Log.e(TAG, "requestPurchase: storeFacadeWrapper is null!");
@@ -307,7 +344,9 @@ public class Plugin {
 
     public static void requestReceipts() {
         try {
-            //Log.i(TAG, "requestReceipts");
+            if (sEnableLogging) {
+                Log.d(TAG, "requestReceipts");
+            }
             StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
             if (null == storeFacadeWrapper) {
                 Log.e(TAG, "requestReceipts: storeFacadeWrapper is null");
@@ -322,7 +361,9 @@ public class Plugin {
     public static boolean isRunningOnSupportedHardware() {
         boolean result = false;
         try {
-            //Log.i(TAG, "isRunningOnSupportedHardware");
+            if (sEnableLogging) {
+                Log.d(TAG, "isRunningOnSupportedHardware");
+            }
             StoreFacadeWrapper storeFacadeWrapper = getStoreFacadeWrapper();
             if (null == storeFacadeWrapper) {
                 Log.e(TAG, "isRunningOnSupportedHardware: storeFacadeWrapper is null!");
@@ -372,7 +413,9 @@ public class Plugin {
 
     public static void setSafeArea(final float percentage) {
         try {
-            //Log.i(TAG, "setSafeArea: "+percentage);
+            if (sEnableLogging) {
+                Log.d(TAG, "setSafeArea: "+percentage);
+            }
             Activity activity = getActivity();
             if (null != activity) {
                 Runnable runnable = new Runnable() {
@@ -389,7 +432,9 @@ public class Plugin {
 
     public static void clearFocus() {
         try {
-            //Log.i(TAG, "clearFocus");
+            if (sEnableLogging) {
+                Log.d(TAG, "clearFocus");
+            }
             final Activity activity = getActivity();
             if (null != activity) {
                 Runnable runnable = new Runnable() {
@@ -410,7 +455,9 @@ public class Plugin {
 
     public static void saveGameMod(final GameMod gameMod, final GameMod.Editor editor) {
         try {
-            //Log.i(TAG, "saveGameMod");
+            if (sEnableLogging) {
+                Log.d(TAG, "saveGameMod");
+            }
             final Activity activity = getActivity();
             if (null != activity) {
                 Runnable runnable = new Runnable() {
@@ -432,7 +479,9 @@ public class Plugin {
 
     public static void getGameModManagerInstalled() {
         try {
-            //Log.i(TAG, "getGameModManagerInstalled");
+            if (sEnableLogging) {
+                Log.d(TAG, "getGameModManagerInstalled");
+            }
             final Activity activity = getActivity();
             if (null != activity) {
                 Runnable runnable = new Runnable() {
@@ -465,7 +514,9 @@ public class Plugin {
 
     public static void getGameModManagerPublished(final String sortMethod) {
         try {
-            //Log.i(TAG, "getGameModManagerPublished");
+            if (sEnableLogging) {
+                Log.d(TAG, "getGameModManagerPublished");
+            }
             final Activity activity = getActivity();
             if (null != activity) {
                 Runnable runnable = new Runnable() {
@@ -475,7 +526,9 @@ public class Plugin {
                             Log.e(TAG, "getGameModManagerPublished: storeFacadeWrapper is null!");
                         } else {
                             GameModManager.SortMethod sort = GameModManager.SortMethod.valueOf(sortMethod);
-                            //Log.i(TAG, "sortMethod="+sortMethod);
+                            if (sEnableLogging) {
+                                Log.d(TAG, "sortMethod="+sortMethod);
+                            }
                             storeFacadeWrapper.getGameModManagerPublished(sort);
                         }
                     }
@@ -493,7 +546,9 @@ public class Plugin {
             Log.e(TAG, "getGameModManagerPublishedResults result is null!");
             return null;
         }
-        //Log.i(TAG, "getGameModPublishedResults returning size="+result.size());
+        if (sEnableLogging) {
+            Log.d(TAG, "getGameModPublishedResults returning size="+result.size());
+        }
         GameMod[] retVal = new GameMod[result.size()];
         result.toArray(retVal);
         return retVal;
@@ -501,7 +556,9 @@ public class Plugin {
 
     public static void contentDelete(final GameMod gameMod) {
         try {
-            //Log.i(TAG, "contentDelete");
+            if (sEnableLogging) {
+                Log.d(TAG, "contentDelete");
+            }
             final Activity activity = getActivity();
             if (null != activity) {
                 Runnable runnable = new Runnable() {
@@ -523,7 +580,9 @@ public class Plugin {
 
     public static void contentPublish(final GameMod gameMod) {
         try {
-            //Log.i(TAG, "contentPublish");
+            if (sEnableLogging) {
+                Log.d(TAG, "contentPublish");
+            }
             final Activity activity = getActivity();
             if (null != activity) {
                 Runnable runnable = new Runnable() {
@@ -545,7 +604,9 @@ public class Plugin {
 
     public static void contentUnpublish(final GameMod gameMod) {
         try {
-            //Log.i(TAG, "contentUnpublish");
+            if (sEnableLogging) {
+                Log.d(TAG, "contentUnpublish");
+            }
             final Activity activity = getActivity();
             if (null != activity) {
                 Runnable runnable = new Runnable() {
@@ -567,7 +628,9 @@ public class Plugin {
 
     public static void contentDownload(final GameMod gameMod) {
         try {
-            //Log.i(TAG, "contentDownload");
+            if (sEnableLogging) {
+                Log.d(TAG, "contentDownload");
+            }
             final Activity activity = getActivity();
             if (null != activity) {
                 Runnable runnable = new Runnable() {

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#define VERBOSE_LOGGING
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -63,7 +65,9 @@ namespace com.razerzone.store.sdk.engine.unity
 
         public void onPause(string ignore)
         {
-            //Debug.Log("onPause listeners="+RazerSDK.getPauseListeners().Count);
+#if VERBOSE_LOGGING
+            Debug.Log("onPause listeners="+RazerSDK.getPauseListeners().Count);
+#endif
             foreach (RazerSDK.IPauseListener listener in RazerSDK.getPauseListeners())
             {
                 listener.OnPause();
@@ -72,7 +76,9 @@ namespace com.razerzone.store.sdk.engine.unity
 
         public void onResume(string ignore)
         {
-            //Debug.Log("onResume listeners="+RazerSDK.getResumeListeners().Count);
+#if VERBOSE_LOGGING
+            Debug.Log("onResume listeners="+RazerSDK.getResumeListeners().Count);
+#endif
             foreach (RazerSDK.IResumeListener listener in RazerSDK.getResumeListeners())
             {
                 listener.OnResume();
@@ -81,11 +87,11 @@ namespace com.razerzone.store.sdk.engine.unity
 
 #endif
 
-        #endregion
+#endregion
 
-        #region Initialization Listeners
+            #region Initialization Listeners
 
-        IEnumerator InvokeInitPlugin(bool wait)
+            IEnumerator InvokeInitPlugin(bool wait)
         {
             if (wait)
             {
@@ -98,7 +104,9 @@ namespace com.razerzone.store.sdk.engine.unity
 #if UNITY_ANDROID && !UNITY_EDITOR
             try
             {
-                //Debug.Log("InvokeInitPlugin SecretAPIKey=" + m_secretApiKey);
+#if VERBOSE_LOGGING
+                Debug.Log("InvokeInitPlugin SecretAPIKey=" + m_secretApiKey);
+#endif
                 RazerSDK.initPlugin(m_secretApiKey);
             }
             catch (Exception)
@@ -106,18 +114,20 @@ namespace com.razerzone.store.sdk.engine.unity
                 OnFailureInitializePlugin("Failed to invoke initPlugin.");
             }
 #endif
-        }
+            }
 
         public void OnSuccessInitializePlugin(string ignore)
         {
+#if VERBOSE_LOGGING
             Debug.Log("Razer Plugin Initialized.");
+#endif
         }
 
         public void OnFailureInitializePlugin(string errorMessage)
         {
+#if VERBOSE_LOGGING
             Debug.Log(string.Format("initPlugin failed: {0}", errorMessage));
-            //reattempt
-            StartCoroutine("InvokeInitPlugin", true);
+#endif
         }
 
         #endregion
@@ -408,10 +418,53 @@ namespace com.razerzone.store.sdk.engine.unity
             }
         }
 
+        public void RequestLoginSuccessListener(string ignore)
+        {
+#if VERBOSE_LOGGING
+            Debug.Log("RequestLoginSuccessListener:");
+#endif
+            foreach (RazerSDK.IRequestLoginListener listener in RazerSDK.getRequestLoginListeners())
+            {
+                if (null != listener)
+                {
+                    listener.RequestLoginOnSuccess();
+                }
+            }
+        }
+        public void RequestLoginFailureListener(string jsonData)
+        {
+#if VERBOSE_LOGGING
+            Debug.LogError(string.Format("RequestLoginFailureListener: jsonData={0}", jsonData));
+#endif
+
+            foreach (RazerSDK.IRequestLoginListener listener in RazerSDK.getRequestLoginListeners())
+            {
+                if (null != listener)
+                {
+                    listener.RequestLoginOnFailure(0, jsonData);
+                }
+            }
+        }
+        public void RequestLoginCancelListener(string ignore)
+        {
+#if VERBOSE_LOGGING
+            Debug.Log("RequestLoginCancelListener:");
+#endif
+
+            foreach (RazerSDK.IRequestLoginListener listener in RazerSDK.getRequestLoginListeners())
+            {
+                if (null != listener)
+                {
+                    listener.RequestLoginOnCancel();
+                }
+            }
+        }
+
         public void RequestGamerInfoSuccessListener(string jsonData)
         {
-            Plugin.m_pendingRequestGamerInfo = false;
-            //Debug.Log(string.Format("RequestGamerInfoSuccessListener: jsonData={0}", jsonData));
+#if VERBOSE_LOGGING
+            Debug.Log(string.Format("RequestGamerInfoSuccessListener: jsonData={0}", jsonData));
+#endif
             using (JSONObject jsonObject = new JSONObject(jsonData))
             {
                 RazerSDK.GamerInfo gamerInfo = RazerSDK.GamerInfo.Parse(jsonObject);
@@ -426,8 +479,9 @@ namespace com.razerzone.store.sdk.engine.unity
         }
         public void RequestGamerInfoFailureListener(string jsonData)
         {
-            Plugin.m_pendingRequestGamerInfo = false;
-            //Debug.LogError(string.Format("RequestGamerInfoFailureListener: jsonData={0}", jsonData));
+#if VERBOSE_LOGGING
+            Debug.LogError(string.Format("RequestGamerInfoFailureListener: jsonData={0}", jsonData));
+#endif
             foreach (RazerSDK.IRequestGamerInfoListener listener in RazerSDK.getRequestGamerInfoListeners())
             {
                 if (null != listener)
@@ -438,7 +492,10 @@ namespace com.razerzone.store.sdk.engine.unity
         }
         public void RequestGamerInfoCancelListener(string ignore)
         {
-            Plugin.m_pendingRequestGamerInfo = false;
+#if VERBOSE_LOGGING
+            Debug.Log("RequestGamerInfoCancelListener:");
+#endif
+
             foreach (RazerSDK.IRequestGamerInfoListener listener in RazerSDK.getRequestGamerInfoListeners())
             {
                 if (null != listener)
@@ -450,9 +507,9 @@ namespace com.razerzone.store.sdk.engine.unity
 
         public void RequestProductsSuccessListener(string jsonData)
         {
-            Plugin.m_pendingRequestProducts = false;
-
-            //Debug.Log(string.Format("RazerSDK.RequestProductsSuccessListener: jsonData={0}", jsonData));
+#if VERBOSE_LOGGING
+            Debug.Log(string.Format("RazerSDK.RequestProductsSuccessListener: jsonData={0}", jsonData));
+#endif
 
             using (JSONArray jsonArray = new JSONArray(jsonData))
             {
@@ -461,7 +518,9 @@ namespace com.razerzone.store.sdk.engine.unity
                 {
                     using (JSONObject jsonObject = jsonArray.getJSONObject(index))
                     {
-                        //Debug.Log(string.Format("Found Product: {0}", jsonObject.toString()));
+#if VERBOSE_LOGGING
+                        Debug.Log(string.Format("Found Product: {0}", jsonObject.toString()));
+#endif
                         RazerSDK.Product product = RazerSDK.Product.Parse(jsonObject);
                         products.Add(product);
                     }
@@ -477,8 +536,9 @@ namespace com.razerzone.store.sdk.engine.unity
         }
         public void RequestProductsFailureListener(string jsonData)
         {
-            Plugin.m_pendingRequestProducts = false;
-            //Debug.LogError(string.Format("RequestProductsFailureListener: jsonData={0}", jsonData));
+#if VERBOSE_LOGGING
+            Debug.LogError(string.Format("RequestProductsFailureListener: jsonData={0}", jsonData));
+#endif
             foreach (RazerSDK.IRequestProductsListener listener in RazerSDK.getRequestProductsListeners())
             {
                 if (null != listener)
@@ -487,27 +547,42 @@ namespace com.razerzone.store.sdk.engine.unity
                 }
             }
         }
+        public void RequestProductsCancelListener(string ignore)
+        {
+#if VERBOSE_LOGGING
+            Debug.Log("RequestProductsCancelListener:");
+#endif
+            foreach (RazerSDK.IRequestProductsListener listener in RazerSDK.getRequestProductsListeners())
+            {
+                if (null != listener)
+                {
+                    listener.RequestProductsOnCancel();
+                }
+            }
+        }
 
         public void RequestPurchaseSuccessListener(string jsonData)
         {
-            Plugin.m_pendingRequestPurchase = false;
-            //Debug.Log(string.Format("RequestPurchaseSuccessListener: jsonData={0}", jsonData));
+#if VERBOSE_LOGGING
+            Debug.Log(string.Format("RequestPurchaseSuccessListener: jsonData={0}", jsonData));
+#endif
             using (JSONObject jsonObject = new JSONObject(jsonData))
             {
-                RazerSDK.Product product = RazerSDK.Product.Parse(jsonObject);
+                RazerSDK.PurchaseResult purchaseResult = RazerSDK.PurchaseResult.Parse(jsonObject);
                 foreach (RazerSDK.IRequestPurchaseListener listener in RazerSDK.getRequestPurchaseListeners())
                 {
                     if (null != listener)
                     {
-                        listener.RequestPurchaseOnSuccess(product);
+                        listener.RequestPurchaseOnSuccess(purchaseResult);
                     }
                 }
             }
         }
         public void RequestPurchaseFailureListener(string jsonData)
         {
-            Plugin.m_pendingRequestPurchase = false;
-            //Debug.LogError(string.Format("RequestPurchaseFailureListener: jsonData={0}", jsonData));
+#if VERBOSE_LOGGING
+            Debug.LogError(string.Format("RequestPurchaseFailureListener: jsonData={0}", jsonData));
+#endif
             foreach (RazerSDK.IRequestPurchaseListener listener in RazerSDK.getRequestPurchaseListeners())
             {
                 if (null != listener)
@@ -518,7 +593,9 @@ namespace com.razerzone.store.sdk.engine.unity
         }
         public void RequestPurchaseCancelListener(string ignore)
         {
-            Plugin.m_pendingRequestPurchase = false;
+#if VERBOSE_LOGGING
+            Debug.Log("RequestPurchaseCancelListener:");
+#endif
             foreach (RazerSDK.IRequestPurchaseListener listener in RazerSDK.getRequestPurchaseListeners())
             {
                 if (null != listener)
@@ -530,9 +607,9 @@ namespace com.razerzone.store.sdk.engine.unity
 
         public void RequestReceiptsSuccessListener(string jsonData)
         {
-            Plugin.m_pendingRequestReceipts = false;
-
-            //Debug.Log(string.Format("RazerSDK.RequestReceiptsSuccessListener: jsonData={0}", jsonData));
+#if VERBOSE_LOGGING
+            Debug.Log(string.Format("RazerSDK.RequestReceiptsSuccessListener: jsonData={0}", jsonData));
+#endif
 
             using (JSONArray jsonArray = new JSONArray(jsonData))
             {
@@ -541,7 +618,9 @@ namespace com.razerzone.store.sdk.engine.unity
                 {
                     using (JSONObject jsonObject = jsonArray.getJSONObject(index))
                     {
-                        //Debug.Log(string.Format("Found Receipt: {0}", jsonObject.toString()));
+#if VERBOSE_LOGGING
+                        Debug.Log(string.Format("Found Receipt: {0}", jsonObject.toString()));
+#endif
                         RazerSDK.Receipt receipt = RazerSDK.Receipt.Parse(jsonObject);
                         receipts.Add(receipt);
                     }
@@ -557,8 +636,9 @@ namespace com.razerzone.store.sdk.engine.unity
         }
         public void RequestReceiptsFailureListener(string jsonData)
         {
-            Plugin.m_pendingRequestReceipts = false;
+#if VERBOSE_LOGGING
             Debug.LogError(string.Format("RequestReceiptsFailureListener: jsonData={0}", jsonData));
+#endif
             foreach (RazerSDK.IRequestReceiptsListener listener in RazerSDK.getRequestReceiptsListeners())
             {
                 if (null != listener)
@@ -569,7 +649,9 @@ namespace com.razerzone.store.sdk.engine.unity
         }
         public void RequestReceiptsCancelListener(string ignore)
         {
-            Plugin.m_pendingRequestReceipts = false;
+#if VERBOSE_LOGGING
+            Debug.Log("RequestReceiptsCancelListener:");
+#endif
             foreach (RazerSDK.IRequestReceiptsListener listener in RazerSDK.getRequestReceiptsListeners())
             {
                 if (null != listener)
@@ -581,8 +663,9 @@ namespace com.razerzone.store.sdk.engine.unity
 
         public void ShutdownOnSuccessListener(string ignore)
         {
-            Plugin.m_pendingShutdown = false;
+#if VERBOSE_LOGGING
             Debug.Log("RazerSDK.ShutdownOnSuccessListener");
+#endif
 
             foreach (RazerSDK.IShutdownListener listener in RazerSDK.getShutdownListeners())
             {
@@ -594,8 +677,9 @@ namespace com.razerzone.store.sdk.engine.unity
         }
         public void ShutdownOnFailureListener(string ignore)
         {
-            Plugin.m_pendingShutdown = false;
+#if VERBOSE_LOGGING
             Debug.Log("RazerSDK.ShutdownOnFailureListener");
+#endif
 
             foreach (RazerSDK.IShutdownListener listener in RazerSDK.getShutdownListeners())
             {
@@ -613,9 +697,7 @@ namespace com.razerzone.store.sdk.engine.unity
         void Awake()
         {
             s_instance = this;
-#if UNITY_ANDROID && !UNITY_EDITOR
             Debug.Log(string.Format("RazerPluginVersion: VERSION={0}", RazerSDK.PLUGIN_VERSION));
-#endif
         }
         void Start()
         {
@@ -624,9 +706,9 @@ namespace com.razerzone.store.sdk.engine.unity
 
             StartCoroutine("InvokeInitPlugin", false);
         }
-        #endregion
+#endregion
 
-        #region Controllers
+#region Controllers
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         public void Update()
@@ -650,9 +732,9 @@ namespace com.razerzone.store.sdk.engine.unity
 
 #endif
 
-        #endregion
+#endregion
 
-        #region Debug Logs from Java
+#region Debug Logs from Java
         public void DebugLog(string message)
         {
             Debug.Log(message);
@@ -662,7 +744,7 @@ namespace com.razerzone.store.sdk.engine.unity
         {
             Debug.LogError(message);
         }
-        #endregion
+#endregion
 
     }
 }

@@ -24,6 +24,7 @@ namespace com.razerzone.store.sdk.engine.unity
 #if UNITY_ANDROID && !UNITY_EDITOR
     ,
     RazerSDK.IPauseListener, RazerSDK.IResumeListener,
+    RazerSDK.IRequestLoginListener,
     RazerSDK.IRequestGamerInfoListener,
     RazerSDK.IRequestProductsListener, RazerSDK.IRequestPurchaseListener, RazerSDK.IRequestReceiptsListener,
     RazerSDK.IShutdownListener
@@ -39,12 +40,9 @@ namespace com.razerzone.store.sdk.engine.unity
 			"__DECLINED__THIS_PURCHASE",
 		};
 
-#if UNITY_ANDROID && !UNITY_EDITOR
+        private const int BUTTON_HEIGHT = 60;
 
-        /// <summary>
-        /// Handle focusing items
-        /// </summary>
-        private FocusManager m_focusManager = new FocusManager();
+#if UNITY_ANDROID && !UNITY_EDITOR
 
         /// <summary>
         /// Show the current state
@@ -69,7 +67,7 @@ namespace com.razerzone.store.sdk.engine.unity
         /// <summary>
         /// A key to store game data
         /// </summary>
-        private const string KEY_PUT_GAME_DATA = "ShowProductsExample";
+        private const string KEY_PUT_GAME_DATA = "ExampleBilling";
 
         /// <summary>
         /// The game data to display what was stored
@@ -81,22 +79,11 @@ namespace com.razerzone.store.sdk.engine.unity
         /// </summary>
         private bool m_isRunningOnStoreHardware = false;
 
-        /// <summary>
-        /// Buttons
-        /// </summary>
-        private object m_btnPutGameData = new object();
-        private object m_btnGetGameData = new object();
-        private object m_btnRequestGamerInfo = new object();
-        private object m_btnRequestProducts = new object();
-        private object m_btnRequestReceipts = new object();
-        private object m_btn720 = new object();
-        private object m_btn1080 = new object();
-        private object m_btnExit = new object();
-
         void Awake()
         {
             RazerSDK.registerPauseListener(this);
             RazerSDK.registerResumeListener(this);
+            RazerSDK.registerRequestLoginListener(this);
             RazerSDK.registerRequestGamerInfoListener(this);
             RazerSDK.registerRequestProductsListener(this);
             RazerSDK.registerRequestPurchaseListener(this);
@@ -107,6 +94,7 @@ namespace com.razerzone.store.sdk.engine.unity
         {
             RazerSDK.unregisterPauseListener(this);
             RazerSDK.unregisterResumeListener(this);
+            RazerSDK.unregisterRequestLoginListener(this);
             RazerSDK.unregisterRequestGamerInfoListener(this);
             RazerSDK.unregisterRequestProductsListener(this);
             RazerSDK.unregisterRequestPurchaseListener(this);
@@ -135,6 +123,21 @@ namespace com.razerzone.store.sdk.engine.unity
             m_state = "Failed to shutdown!";
         }
 
+        public void RequestLoginOnSuccess()
+        {
+            m_status = "RequestLoginOnSuccess";
+        }
+
+        public void RequestLoginOnFailure(int errorCode, string errorMessage)
+        {
+            m_status = string.Format("RequestLoginOnFailure: error={0} errorMessage={1}", errorCode, errorMessage);
+        }
+
+        public void RequestLoginOnCancel()
+        {
+            m_status = "RequestLoginOnCancel";
+        }
+
         public void RequestGamerInfoOnSuccess(RazerSDK.GamerInfo gamerInfo)
         {
             m_status = "RequestGamerInfoOnSuccess";
@@ -159,26 +162,6 @@ namespace com.razerzone.store.sdk.engine.unity
             for (int index = 0; index < products.Count; ++index)
             {
                 RazerSDK.Product product = products[index];
-                // Get Products Right goes to the first element
-                if (index == 0)
-                {
-                    m_focusManager.Mappings[m_btnRequestProducts].Right = product;
-                }
-                // Products left goes back to the GetProducts button
-                m_focusManager.Mappings[product] = new FocusManager.ButtonMapping()
-                {
-                    Left = m_btnRequestProducts
-                };
-                // Product down goes to the next element
-                if ((index + 1) < products.Count)
-                {
-                    m_focusManager.Mappings[product].Down = products[index + 1];
-                }
-                // Product up goes to the previous element
-                if (index > 0)
-                {
-                    m_focusManager.Mappings[product].Up = products[index - 1];
-                }
                 m_products.Add(product);
             }
         }
@@ -193,9 +176,9 @@ namespace com.razerzone.store.sdk.engine.unity
             m_status = "RequestProductsOnCancel";
         }
 
-        public void RequestPurchaseOnSuccess(RazerSDK.Product product)
+        public void RequestPurchaseOnSuccess(RazerSDK.PurchaseResult purchaseResult)
         {
-            m_status = string.Format("RequestPurchaseOnSuccess: {0}", product.identifier);
+            m_status = string.Format("RequestPurchaseOnSuccess: identifier={0} ownerId={1}", purchaseResult.identifier, purchaseResult.ownerId);
 
             // cache the receipt for offline use
             RazerSDK.putGameData("FULL_GAME_UNLOCK", "1");
@@ -279,54 +262,33 @@ namespace com.razerzone.store.sdk.engine.unity
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(400);
-                if (m_focusManager.SelectedButton == m_btnExit)
-                {
-                    GUI.backgroundColor = Color.red;
-                }
-                if (GUILayout.Button("Exit", GUILayout.Height(40)) ||
-                    (m_focusManager.SelectedButton == m_btnExit &&
-                    RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_O)))
+                if (GUILayout.Button("Exit", GUILayout.Height(BUTTON_HEIGHT)))
                 {
                     m_status = "Exiting...";
                     RazerSDK.shutdown();
                 }
-                GUI.backgroundColor = oldColor;
                 GUILayout.EndHorizontal();
 
                 GUILayout.Label(string.Empty);
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(400);
-                if (m_focusManager.SelectedButton == m_btn720)
-                {
-                    GUI.backgroundColor = Color.red;
-                }
-                if (GUILayout.Button("720p", GUILayout.Height(40)) ||
-                    (m_focusManager.SelectedButton == m_btn720 &&
-                    RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_O)))
+                if (GUILayout.Button("720p", GUILayout.Height(BUTTON_HEIGHT)))
                 {
                     m_status = "Setting 1280x720...";
                     Screen.SetResolution(1280, 720, true);
                 }
-                GUI.backgroundColor = oldColor;
                 GUILayout.EndHorizontal();
 
                 GUILayout.Label(string.Empty);
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(400);
-                if (m_focusManager.SelectedButton == m_btn1080)
-                {
-                    GUI.backgroundColor = Color.red;
-                }
-                if (GUILayout.Button("1080p", GUILayout.Height(40)) ||
-                    (m_focusManager.SelectedButton == m_btn1080 &&
-                    RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_O)))
+                if (GUILayout.Button("1080p", GUILayout.Height(BUTTON_HEIGHT)))
                 {
                     m_status = "Setting 1920x1080...";
                     Screen.SetResolution(1920, 1080, true);
                 }
-                GUI.backgroundColor = oldColor;
                 GUILayout.EndHorizontal();
 
                 GUILayout.Label(string.Empty);
@@ -357,6 +319,16 @@ namespace com.razerzone.store.sdk.engine.unity
                 GUILayout.EndHorizontal();
 
                 GUILayout.Label(string.Empty);
+
+                GUILayout.BeginHorizontal();
+                GUILayout.Space(400);
+                if (GUILayout.Button("Request Login", GUILayout.Height(BUTTON_HEIGHT)))
+                {
+                    m_status = "Requesting login...";
+                    RazerSDK.requestLogin();
+                }
+                GUILayout.EndHorizontal();
+
                 GUILayout.Label(string.Empty);
 
                 GUILayout.BeginHorizontal();
@@ -371,18 +343,11 @@ namespace com.razerzone.store.sdk.engine.unity
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(400);
-                if (m_focusManager.SelectedButton == m_btnRequestGamerInfo)
-                {
-                    GUI.backgroundColor = Color.red;
-                }
-                if (GUILayout.Button("Request Gamer Info", GUILayout.Height(40)) ||
-                    (m_focusManager.SelectedButton == m_btnRequestGamerInfo &&
-                    RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_O)))
+                if (GUILayout.Button("Request Gamer Info", GUILayout.Height(BUTTON_HEIGHT)))
                 {
                     m_status = "Requesting gamer info...";
                     RazerSDK.requestGamerInfo();
                 }
-                GUI.backgroundColor = oldColor;
                 GUILayout.EndHorizontal();
 
                 GUILayout.Label(string.Empty);
@@ -390,29 +355,15 @@ namespace com.razerzone.store.sdk.engine.unity
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(400);
-                if (m_focusManager.SelectedButton == m_btnPutGameData)
-                {
-                    GUI.backgroundColor = Color.red;
-                }
-                if (GUILayout.Button("Put Game Data", GUILayout.Height(40)) ||
-                    (m_focusManager.SelectedButton == m_btnPutGameData &&
-                    RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_O)))
+                if (GUILayout.Button("Put Game Data", GUILayout.Height(BUTTON_HEIGHT)))
                 {
                     RazerSDK.putGameData(KEY_PUT_GAME_DATA, "This is a test!!!!");
                 }
-                GUI.backgroundColor = oldColor;
 
-                if (m_focusManager.SelectedButton == m_btnGetGameData)
-                {
-                    GUI.backgroundColor = Color.red;
-                }
-                if (GUILayout.Button("Get Game Data", GUILayout.Height(40)) ||
-                    (m_focusManager.SelectedButton == m_btnGetGameData &&
-                    RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_O)))
+                if (GUILayout.Button("Get Game Data", GUILayout.Height(BUTTON_HEIGHT)))
                 {
                     m_gameData = RazerSDK.getGameData(KEY_PUT_GAME_DATA);
                 }
-                GUI.backgroundColor = oldColor;
                 GUILayout.Label(string.Format("GameData: {0}", m_gameData));
                 GUILayout.EndHorizontal();
 
@@ -426,13 +377,7 @@ namespace com.razerzone.store.sdk.engine.unity
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(400);
-                if (m_focusManager.SelectedButton == m_btnRequestProducts)
-                {
-                    GUI.backgroundColor = Color.red;
-                }
-                if (GUILayout.Button("Request Products", GUILayout.Height(40)) ||
-                    (m_focusManager.SelectedButton == m_btnRequestProducts &&
-                    RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_O)))
+                if (GUILayout.Button("Request Products", GUILayout.Height(BUTTON_HEIGHT)))
                 {
                     List<string> productIdentifierList =
                         new List<string>();
@@ -445,7 +390,6 @@ namespace com.razerzone.store.sdk.engine.unity
                     m_status = "Requesting products...";
                     RazerSDK.requestProducts(productIdentifierList);
                 }
-                GUI.backgroundColor = oldColor;
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
 
@@ -460,20 +404,12 @@ namespace com.razerzone.store.sdk.engine.unity
 
                     GUILayout.FlexibleSpace();
 
-                    if (m_focusManager.SelectedButton == product)
-                    {
-                        GUI.backgroundColor = Color.red;
-                    }
-                    if (GUILayout.Button("Request Purchase") ||
-                        (m_focusManager.SelectedButton == product &&
-                        RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_O)))
+                    if (GUILayout.Button("Request Purchase", GUILayout.Height(BUTTON_HEIGHT)))
                     {
                         m_status = "Requesting purchase...";
                         //Debug.Log(string.Format("Purchase Identifier: {0}", product.identifier));
 						RazerSDK.requestPurchase(product.identifier, RazerSDK.ProductType.ENTITLEMENT);
                     }
-                    GUI.backgroundColor = oldColor;
-
                     GUILayout.EndHorizontal();
                 }
 
@@ -486,18 +422,11 @@ namespace com.razerzone.store.sdk.engine.unity
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(400);
-                if (m_focusManager.SelectedButton == m_btnRequestReceipts)
-                {
-                    GUI.backgroundColor = Color.red;
-                }
-                if (GUILayout.Button("Request Receipts", GUILayout.Height(40)) ||
-                    (m_focusManager.SelectedButton == m_btnRequestReceipts &&
-                    RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_O)))
+                if (GUILayout.Button("Request Receipts", GUILayout.Height(BUTTON_HEIGHT)))
                 {
                     m_status = "Requesting receipts...";
                     RazerSDK.requestReceipts();
                 }
-                GUI.backgroundColor = oldColor;
                 GUILayout.EndHorizontal();
 
                 foreach (RazerSDK.Receipt receipt in m_receipts)
@@ -522,49 +451,13 @@ namespace com.razerzone.store.sdk.engine.unity
 
         public IEnumerator Start()
         {
-            m_focusManager.Mappings[m_btnExit] = new FocusManager.ButtonMapping()
-            {
-                Down = m_btn720
-            };
-            m_focusManager.Mappings[m_btn720] = new FocusManager.ButtonMapping()
-            {
-                Up = m_btnExit,
-                Down = m_btn1080
-            };
-            m_focusManager.Mappings[m_btn1080] = new FocusManager.ButtonMapping()
-            {
-                Up = m_btn720,
-                Down = m_btnRequestGamerInfo
-            };
-            m_focusManager.Mappings[m_btnRequestGamerInfo] = new FocusManager.ButtonMapping()
-            {
-                Up = m_btn1080,
-                Down = m_btnPutGameData
-            };
-            m_focusManager.Mappings[m_btnPutGameData] = new FocusManager.ButtonMapping()
-            {
-                Up = m_btnRequestGamerInfo,
-                Right = m_btnGetGameData,
-                Down = m_btnRequestProducts
-            };
-            m_focusManager.Mappings[m_btnGetGameData] = new FocusManager.ButtonMapping()
-            {
-                Up = m_btnRequestGamerInfo,
-                Left = m_btnPutGameData,
-                Down = m_btnRequestProducts
-            };
-            m_focusManager.Mappings[m_btnRequestProducts] = new FocusManager.ButtonMapping()
-            {
-                Up = m_btnPutGameData,
-                Down = m_btnRequestReceipts
-            };
-            m_focusManager.Mappings[m_btnRequestReceipts] = new FocusManager.ButtonMapping()
-            {
-                Up = m_btnRequestProducts,
-            };
 
-            // set default selection
-            m_focusManager.SelectedButton = m_btnRequestGamerInfo;
+            foreach (string identifier in Purchasables)
+            {
+                RazerSDK.Product product = new RazerSDK.Product();
+                product.identifier = identifier;
+                m_products.Add(product);
+            }
 
             // wait for IAP to initialize
             while (!RazerSDK.isIAPInitComplete())
@@ -576,84 +469,6 @@ namespace com.razerzone.store.sdk.engine.unity
             RazerSDK.requestReceipts();
 
             m_isRunningOnStoreHardware = RazerSDK.isRunningOnSupportedHardware();
-        }
-
-        private void Update()
-        {
-            if (RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_DPAD_DOWN))
-            {
-                m_focusManager.FocusDown();
-            }
-            if (RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_DPAD_LEFT))
-            {
-                m_focusManager.FocusLeft();
-            }
-            if (RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_DPAD_RIGHT))
-            {
-                m_focusManager.FocusRight();
-            }
-            if (RazerSDK.ControllerInput.GetButtonUp(Controller.BUTTON_DPAD_UP))
-            {
-                m_focusManager.FocusUp();
-            }
-        }
-
-        public class FocusManager
-        {
-            private const int DELAY_MS = 150;
-
-            public object SelectedButton = null;
-
-            private void SetSelection(object selection)
-            {
-                if (null != selection)
-                {
-                    SelectedButton = selection;
-                }
-            }
-
-            public class ButtonMapping
-            {
-                public object Up = null;
-                public object Left = null;
-                public object Right = null;
-                public object Down = null;
-            }
-
-            public Dictionary<object, ButtonMapping> Mappings = new Dictionary<object, ButtonMapping>();
-
-            public void FocusDown()
-            {
-                if (null != SelectedButton &&
-                    Mappings.ContainsKey(SelectedButton))
-                {
-                    SetSelection(Mappings[SelectedButton].Down);
-                }
-            }
-            public void FocusLeft()
-            {
-                if (null != SelectedButton &&
-                    Mappings.ContainsKey(SelectedButton))
-                {
-                    SetSelection(Mappings[SelectedButton].Left);
-                }
-            }
-            public void FocusRight()
-            {
-                if (null != SelectedButton &&
-                    Mappings.ContainsKey(SelectedButton))
-                {
-                    SetSelection(Mappings[SelectedButton].Right);
-                }
-            }
-            public void FocusUp()
-            {
-                if (null != SelectedButton &&
-                    Mappings.ContainsKey(SelectedButton))
-                {
-                    SetSelection(Mappings[SelectedButton].Up);
-                }
-            }
         }
 
         #endregion

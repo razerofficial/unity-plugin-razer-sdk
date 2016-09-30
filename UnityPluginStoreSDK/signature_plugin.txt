@@ -60,6 +60,9 @@ public class com.razerzone.store.sdk.engine.unity.Plugin {
   public static java.lang.String getGameData(java.lang.String);
     Signature: (Ljava/lang/String;)Ljava/lang/String;
 
+  public static void requestLogin();
+    Signature: ()V
+
   public static void requestGamerInfo();
     Signature: ()V
 
