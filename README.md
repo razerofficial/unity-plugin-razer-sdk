@@ -846,6 +846,103 @@ JavaScript
     }
 ```
 
+# Request Login #
+
+`requestLogin` opens a login dialog to sign in the user.
+
+Extend the `IRequestLoginListener` interface to receive the callbacks for invoking `RazerSDK.requestLogin()`.
+
+C#
+```
+public class MyScript : MonoBehaviour,
+    RazerSDK.IRequestLoginListener
+{
+}
+```
+
+JavaScript
+```
+public class MyScript extends MonoBehaviour implements
+	RazerSDK.IRequestLoginListener
+{
+}
+```
+
+Register the instance to receive the interface callback events.
+
+C#
+```
+    void Awake()
+    {
+        RazerSDK.registerRequestLoginListener(this);
+    }
+    void OnDestroy()
+    {
+        RazerSDK.unregisterRequestLoginListener(this);
+    }
+```
+
+JavaScript
+```
+    function Awake()
+    {
+        RazerSDK.registerRequestLoginListener(this);
+    }
+
+    function OnDestroy()
+    {
+        RazerSDK.unregisterRequestLoginListener(this);
+    }
+```
+
+The success event indicates the user successfully logged in or was already signed in.
+
+C#
+```
+    public void RequestLoginOnSuccess()
+    {
+    }
+```
+
+JavaScript
+```
+    public function RequestLoginOnSuccess()
+    {
+    }
+```
+
+The failure event will receive an error code and error message.
+
+C#
+```
+    public void RequestLoginOnFailure(int errorCode, string errorMessage)
+    {
+    }
+```
+
+JavaScript
+```
+    public function RequestLoginOnFailure(errorCode : int, errorMessage : String)
+    {
+    }
+```
+
+The cancel event indicates the request was canceled.
+
+C#
+```
+    public void RequestLoginOnCancel()
+    {
+    }
+```
+
+JavaScript
+```
+    public function RequestLoginOnCancel()
+    {
+    }
+```
+
 # Request Gamer Info #
 
 Gamer Info provides access to the gamer username and uuid.
@@ -911,7 +1008,7 @@ JavaScript
     }
 ```
 
-The failure event will receive an error code and error message.
+The failure event will receive an error code and error message. The failure event will be invoked if the user is not signed in.
 
 C#
 ```
@@ -1173,7 +1270,7 @@ JavaScript
     }
 ```
 
-The failure event will receive an error code and error message.
+The failure event will receive an error code and error message. The failure event will be invoked if the user is not signed in.
 
 C#
 ```
@@ -1270,7 +1367,7 @@ JavaScript
     }
 ```
 
-The failure event will receive an error code and error message.
+The failure event will receive an error code and error message. The failure event will be invoked if the user is not signed in.
 
 C#
 ```
