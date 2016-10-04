@@ -33,7 +33,7 @@ namespace com.razerzone.store.sdk.engine.unity
 {
     public static class RazerSDK
     {
-        public const string PLUGIN_VERSION = "2.1.0.6";
+        public const string PLUGIN_VERSION = "2.0.175.1";
 
 #if UNITY_ANDROID && !UNITY_EDITOR
 

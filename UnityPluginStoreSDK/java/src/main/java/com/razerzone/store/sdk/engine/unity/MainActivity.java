@@ -35,7 +35,7 @@ import com.unity3d.player.UnityPlayer;
 public class MainActivity extends Activity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
-	private static final String PLUGIN_VERSION = "2.1.0.6";
+	private static final String PLUGIN_VERSION = "2.0.275.1";
 
 	private static final boolean sEnableLogging = false;
 	private static final boolean sEnableInputLogging = false;
