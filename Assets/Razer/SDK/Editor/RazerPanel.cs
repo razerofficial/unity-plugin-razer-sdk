@@ -189,7 +189,7 @@ namespace com.razerzone.store.sdk.engine.unity
 
         void UpdateAndroidSDKPaths()
         {
-            if (string.IsNullOrEmpty(pathADB))
+            if (!string.IsNullOrEmpty(pathSDK))
             {
                 switch (Application.platform)
                 {
@@ -203,7 +203,7 @@ namespace com.razerzone.store.sdk.engine.unity
                 }
             }
 
-            if (string.IsNullOrEmpty(pathAAPT))
+            if (!string.IsNullOrEmpty(pathSDK))
             {
                 switch (Application.platform)
                 {
