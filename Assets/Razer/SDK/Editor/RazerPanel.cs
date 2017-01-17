@@ -20,6 +20,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEditor;
+#if !UNITY_3 && !UNITY_4
+using UnityEditor.SceneManagement;
+#endif
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -404,7 +407,11 @@ namespace com.razerzone.store.sdk.engine.unity
 
             if (!string.IsNullOrEmpty(m_nextScene))
             {
+#if !UNITY_3 && !UNITY_4
+				EditorSceneManager.OpenScene(m_nextScene);
+#else
                 EditorApplication.OpenScene(m_nextScene);
+#endif
                 m_nextScene = string.Empty;
                 return;
             }
@@ -1079,78 +1086,113 @@ namespace com.razerzone.store.sdk.engine.unity
                     if (GUILayout.Button("Take Screenshot"))
                     {
                         ThreadStart ts = new ThreadStart(() =>
-                                                             {
-                                                                 string currentDirectory = Directory.GetCurrentDirectory();
-                                                                 if (File.Exists(pathADB))
-                                                                 {
-                                                                     //Debug.Log(appPath);
-                                                                     //Debug.Log(pathADB);
-                                                                     string args =
-                                                                             string.Format(
-                                                                                 @"shell /system/bin/screencap -p /sdcard/screenshot.png");
-                                                                     //Debug.Log(args);
-                                                                     ProcessStartInfo ps = new ProcessStartInfo(pathADB,
-                                                                                                                    args);
-                                                                     Process p = new Process();
-                                                                     ps.RedirectStandardOutput = false;
-                                                                     ps.UseShellExecute = true;
-                                                                     ps.CreateNoWindow = false;
-                                                                     ps.WorkingDirectory = currentDirectory;
-                                                                     p.StartInfo = ps;
-                                                                     p.Exited += (object sender, EventArgs e) =>
-                                                                                     {
-                                                                                         p.Dispose();
-                                                                                     };
-                                                                     p.Start();
+						{
+						 string currentDirectory = Directory.GetCurrentDirectory();
+						 if (File.Exists(pathADB))
+						 {
+						     //Debug.Log(appPath);
+						     //Debug.Log(pathADB);
+						     string args =
+						             string.Format(
+						                 @"shell /system/bin/screencap -p /sdcard/screenshot.png");
+						     //Debug.Log(args);
+						     ProcessStartInfo ps = new ProcessStartInfo(pathADB,
+						                                                    args);
+						     Process p = new Process();
+						     ps.RedirectStandardOutput = false;
+						     ps.UseShellExecute = true;
+						     ps.CreateNoWindow = false;
+						     ps.WorkingDirectory = currentDirectory;
+						     p.StartInfo = ps;
+						     p.Exited += (object sender, EventArgs e) =>
+						                     {
+						                         p.Dispose();
+						                     };
+						     p.Start();
 
-                                                                     p.WaitForExit();
+						     p.WaitForExit();
 
 
-                                                                     string args2 =
-                                                                         string.Format(
-                                                                             @"pull /sdcard/screenshot.png screenshot.png");
-                                                                     //Debug.Log(args2);
-                                                                     ProcessStartInfo ps2 = new ProcessStartInfo(pathADB,
-                                                                                                                     args2);
-                                                                     Process p2 = new Process();
-                                                                     ps2.RedirectStandardOutput = false;
-                                                                     ps2.UseShellExecute = true;
-                                                                     ps2.CreateNoWindow = false;
-                                                                     ps2.WorkingDirectory = currentDirectory;
-                                                                     p2.StartInfo = ps2;
-                                                                     p2.Exited += (object sender, EventArgs e) =>
-                                                                                      {
-                                                                                          p2.Dispose();
-                                                                                      };
-                                                                     p2.Start();
+						     string args2 =
+						         string.Format(
+						             @"pull /sdcard/screenshot.png screenshot.png");
+						     //Debug.Log(args2);
+						     ProcessStartInfo ps2 = new ProcessStartInfo(pathADB,
+						                                                     args2);
+						     Process p2 = new Process();
+						     ps2.RedirectStandardOutput = false;
+						     ps2.UseShellExecute = true;
+						     ps2.CreateNoWindow = false;
+						     ps2.WorkingDirectory = currentDirectory;
+						     p2.StartInfo = ps2;
+						     p2.Exited += (object sender, EventArgs e) =>
+						                      {
+						                          p2.Dispose();
+						                      };
+						     p2.Start();
 
-                                                                     p2.WaitForExit();
+						     p2.WaitForExit();
 
-                                                                     string shellPath = @"c:\windows\system32\cmd.exe";
-                                                                     if (File.Exists(shellPath))
-                                                                     {
-                                                                         //Debug.Log(appPath);
-                                                                         //Debug.Log(pathADB);
-                                                                         string args3 =
-                                                                                 string.Format(@"/c start screenshot.png");
-                                                                         //Debug.Log(args3);
-                                                                         ProcessStartInfo ps3 =
-                                                                                 new ProcessStartInfo(shellPath, args3);
-                                                                         Process p3 = new Process();
-                                                                         ps3.RedirectStandardOutput = false;
-                                                                         ps3.UseShellExecute = true;
-                                                                         ps3.CreateNoWindow = false;
-                                                                         ps3.WorkingDirectory = currentDirectory;
-                                                                         p3.StartInfo = ps3;
-                                                                         p3.Exited += (object sender, EventArgs e) =>
-                                                                                          {
-                                                                                              p3.Dispose();
-                                                                                          };
-                                                                         p3.Start();
-                                                                         //p.WaitForExit();
-                                                                     }
-                                                                 }
-                                                             });
+							string shellPath = null;
+
+							switch (Application.platform)
+							{
+							case RuntimePlatform.OSXEditor:
+
+								shellPath = @"/usr/bin/open";
+								if (File.Exists(shellPath))
+								{
+									//Debug.Log(appPath);
+									//Debug.Log(pathADB);
+									string args3 =
+										string.Format(@"screenshot.png");
+									//Debug.Log(args3);
+									ProcessStartInfo ps3 =
+										new ProcessStartInfo(shellPath, args3);
+									Process p3 = new Process();
+									ps3.RedirectStandardOutput = false;
+									ps3.UseShellExecute = true;
+									ps3.CreateNoWindow = false;
+									ps3.WorkingDirectory = currentDirectory;
+									p3.StartInfo = ps3;
+									p3.Exited += (object sender, EventArgs e) =>
+									{
+										p3.Dispose();
+									};
+									p3.Start();
+									//p.WaitForExit();
+								}
+								break;
+							case RuntimePlatform.WindowsEditor:
+
+								shellPath = @"c:\windows\system32\cmd.exe";
+								if (File.Exists(shellPath))
+								{
+									//Debug.Log(appPath);
+									//Debug.Log(pathADB);
+									string args3 =
+										string.Format(@"/c start screenshot.png");
+									//Debug.Log(args3);
+									ProcessStartInfo ps3 =
+										new ProcessStartInfo(shellPath, args3);
+									Process p3 = new Process();
+									ps3.RedirectStandardOutput = false;
+									ps3.UseShellExecute = true;
+									ps3.CreateNoWindow = false;
+									ps3.WorkingDirectory = currentDirectory;
+									p3.StartInfo = ps3;
+									p3.Exited += (object sender, EventArgs e) =>
+									{
+										p3.Dispose();
+									};
+									p3.Start();
+									//p.WaitForExit();
+								}
+
+								break;
+							}
+						 }
+						});
                         Thread thread = new Thread(ts);
                         thread.Start();
                         EditorGUIUtility.ExitGUI();

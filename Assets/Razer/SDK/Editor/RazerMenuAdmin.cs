@@ -145,45 +145,12 @@ namespace com.razerzone.store.sdk.engine.unity
                 Selection.activeGameObject.transform.rotation = Quaternion.Euler(m_euler);
             }
         }
-
-        private static string m_pathUnityProject = string.Empty;
-        private static string m_pathUnityEditor = string.Empty;
-        private static string m_pathJDK = string.Empty;
-        private static string m_pathToolsJar = string.Empty;
-        private static string m_pathJar = string.Empty;
-        private static string m_pathJavaC = string.Empty;
-        private static string m_pathJavaP = string.Empty;
+			
         private static string m_pathSDK = string.Empty;
 
         private static void UpdatePaths()
         {
-            m_pathUnityProject = new DirectoryInfo(Directory.GetCurrentDirectory()).FullName;
-            switch (Application.platform)
-            {
-                case RuntimePlatform.OSXEditor:
-                    m_pathUnityEditor = EditorApplication.applicationPath;
-                    break;
-                case RuntimePlatform.WindowsEditor:
-                    m_pathUnityEditor = new FileInfo(EditorApplication.applicationPath).Directory.FullName;
-                    break;
-            }
             m_pathSDK = EditorPrefs.GetString(RazerPanel.KEY_PATH_ANDROID_SDK);
-            m_pathJDK = EditorPrefs.GetString(RazerPanel.KEY_PATH_JAVA_JDK);
-            switch (Application.platform)
-            {
-                case RuntimePlatform.OSXEditor:
-                    m_pathToolsJar = string.Format("{0}/Contents/Classes/classes.jar", m_pathJDK);
-                    m_pathJar = string.Format("{0}/Contents/Commands/{1}", m_pathJDK, RazerPanel.FILE_JAR_MAC);
-                    m_pathJavaC = string.Format("{0}/Contents/Commands/{1}", m_pathJDK, RazerPanel.FILE_JAVAC_MAC);
-                    m_pathJavaP = string.Format("{0}/Contents/Commands/{1}", m_pathJDK, RazerPanel.FILE_JAVAP_MAC);
-                    break;
-                case RuntimePlatform.WindowsEditor:
-                    m_pathToolsJar = string.Format("{0}/lib/tools.jar", m_pathJDK);
-                    m_pathJar = string.Format("{0}/{1}/{2}", m_pathJDK, RazerPanel.REL_JAVA_PLATFORM_TOOLS, RazerPanel.FILE_JAR_WIN);
-                    m_pathJavaC = string.Format("{0}/{1}/{2}", m_pathJDK, RazerPanel.REL_JAVA_PLATFORM_TOOLS, RazerPanel.FILE_JAVAC_WIN);
-                    m_pathJavaP = string.Format("{0}/{1}/{2}", m_pathJDK, RazerPanel.REL_JAVA_PLATFORM_TOOLS, RazerPanel.FILE_JAVAP_WIN);
-                    break;
-            }
         }
 
         private static string GetPathAndroidJar()
